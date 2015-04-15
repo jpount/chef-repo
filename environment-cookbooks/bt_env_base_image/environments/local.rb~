@@ -1,0 +1,10 @@
+name "local"
+description "the local vagrant/virtualbox environment"
+cookbook_versions({
+    "bt_base" => "= 0.1.0"
+})
+override_attributes(
+  :bt_ssh => { :domain => "ec2-user@bt.base.com" },
+  :bt_ssh => { :user => "ec2-user" }
+)
+

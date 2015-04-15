@@ -1,0 +1,115 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"Launches the common build tools - Artifactory, Apache and Sonarqube",
+  "Parameters":{
+    "Owner": {
+      "Description" : "Resources Owner",
+      "Type": "String",
+      "Default" : "bt"
+    },
+      "Project": {
+      "Description" : "Project Name",
+      "Default" : "panorama",
+      "Type": "String"
+    },
+    "Environment": {
+      "Description" : "Working Environment - prod, test, devel",
+      "Type": "String",
+      "Default" : "devel",
+      "AllowedValues" : [ "test", "devel" ]
+    },  
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName",
+      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription":"must be the name of an existing EC2 KeyPair."
+    },
+    "HostedZone" : {
+      "Type" : "String",
+      "Default" : "bt.manufacturing",
+      "Description" : "The DNS name of an existing Amazon Route 53 hosted zone (do not include trailing .)",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "ArtifactoryInstanceType" : {
+      "Description" : "Artifactory EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "ArtifactoryDnsPrefix" : {
+      "Type" : "String",
+      "Default" : "artifactory",
+      "Description" : "Artifactory DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "ArtifactoryAMI":{  
+      "Type":"String",
+      "Description":"Artifactory AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-2b087b11",
+      "AllowedValues":[  
+        "ami-2b087b11"
+      ]
+    },
+    "SSHLocation":{  
+      "Type":"String",
+      "Description":" The IP address range that can be used to SSH to the EC2 instances",
+      "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default":"0.0.0.0/0",
+      "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "MaxLength":18,
+      "MinLength":9
+    }
+  },
+  "Resources":{  
+    "ArtifactoryStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/artifactory.json",
+        "Parameters":{  
+	  "Owner": {
+            "Ref":"Owner"
+	  },
+  	  "Project": {
+            "Ref":"Project"
+	  },
+ 	  "Environment": {
+            "Ref":"Environment"
+	  },
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"ArtifactoryDnsPrefix"
+          },
+          "InstanceType":{  
+            "Ref":"ArtifactoryInstanceType"
+          },
+          "AMI":{  
+            "Ref":"ArtifactoryAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    }
+  },
+  "Outputs": {
+       "ArtifactoryStackRef": {
+           "Value": { "Ref": "ArtifactoryStack" }
+       },
+       "WebsiteURL": {
+           "Description":"URL for newly created Artifactory application",
+           "Value": { "Fn::GetAtt": [ "ArtifactoryStack", "Outputs.URL" ]}
+       }
+  }
+}
+

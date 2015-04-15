@@ -1,0 +1,10 @@
+source 'https://supermarket.getchef.com'
+
+metadata
+
+cookbook 'bt_awscli', '= 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_awscli'
+cookbook 'bt_apache2', '= 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_apache2'
+cookbook 'bt_artifactory', '= 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_artifactory'
+cookbook 'bt_sonarqube', '= 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_sonarqube'
+cookbook 'bt_java', '= 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_java'
+

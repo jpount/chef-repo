@@ -1,0 +1,22 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-6.5
+    driver:
+      network:
+      - ["forwarded_port", {guest: 80, host: 80}]
+      - ["forwarded_port", {guest: 60, host: 60}]
+      - ["forwarded_port", {guest: 5959, host: 5959}]
+      - ["forwarded_port", {guest: 443, host: 443}]
+      - ["forwarded_port", {guest: 9300, host: 9300}]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[bt_elk_stack::default]
+    attributes:

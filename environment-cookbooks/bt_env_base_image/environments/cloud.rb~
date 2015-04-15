@@ -1,0 +1,9 @@
+name "cloud"
+description "the environment for nodes in the aws cloud"
+cookbook_versions({
+    "bt_base" => "= 0.1.0"
+})
+override_attributes(
+  :bt_ssh => { :domain => "ec2-user@bt.base.com" },
+  :bt_ssh => { :user => "ec2-user" }
+)

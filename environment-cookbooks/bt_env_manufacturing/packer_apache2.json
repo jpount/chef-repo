@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "account_id": "",
+    "aws_access_key_id": "",
+    "aws_secret_key": "",
+    "aws_region": "ap-southeast-2",
+    "s3_bucket": "",
+    "aws_instance_type": "",
+    "aws_source_ami": "",
+    "x509_cert_path": "",
+    "x509_key_path": ""
+  },
+
+  "builders": [
+    { "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key_id`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "ap-southeast-2",
+      "source_ami": "ami-d3daace9",
+      "ssh_timeout": "5m",
+      "instance_type": "{{user `aws_instance_type`}}",
+      "ssh_username": "ec2-user",
+      "ami_name": "apache_rhel_ebs_packer_{{timestamp}}",
+      "tags": {
+		"Name": "BT Apache2",
+		"Release": "Dev",
+		"Cost Centre": "Pan Dev Ops"
+      }
+    }
+  ],
+
+  "provisioners" : [ 
+    { "type": "chef-solo",
+      "environments_path": "./environments",
+      "chef_environment": "cloud",
+      "cookbook_paths": [ "./berks-cookbooks" ],
+      "roles_path": "./roles",
+      "data_bags_path": "./data_bags",
+      "run_list": [ "role[apache2]", "bt_awscli::default" ]
+    },
+    { "type": "shell", "inline": ["mkdir /tmp/tests"] }, 
+    { "type": "file", 
+      "source": "tests/apache2/", 
+      "destination": "/tmp/tests" 
+    },
+    { "type": "shell", 
+      "script": "tests/scripts/serverspec.sh" 
+    },
+    { "type": "shell", "inline": ["rm -rf /tmp/tests"] } 
+  ]
+
+}

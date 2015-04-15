@@ -1,0 +1,6 @@
+name 'apache2'
+description 'Role for Apache web server'
+
+run_list(
+  'recipe[bt_roles::apache2_server]'
+)

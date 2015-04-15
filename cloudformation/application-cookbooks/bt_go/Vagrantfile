@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Multi-VM Configuration: Builds servers using JSON config file
+# Configures VMs based on Chef Solo
+
+# read vm and chef configurations from JSON files
+nodes_config = (JSON.parse(File.read("vagrant_nodes.json")))['nodes']
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.require_plugin "vagrant-omnibus"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # the Chef version to use
+  config.omnibus.chef_version = :latest
+  # enable berkshelf plugin
+  config.berkshelf.enabled = true
+  # configure the basebox
+  config.vm.box = "opscode-centos-6.5"
+  config.vbguest.auto_update = true
+
+  nodes_config.each do |node|
+    node_name   = node[0] # name of node
+    node_values = node[1] # content of node
+
+    config.vm.define node_name do |config|    
+      # configures all forwarding ports in JSON array
+      ports = node_values['ports']
+      ports.each do |port|
+        config.vm.network :forwarded_port,
+          host:  port[':host'],
+          guest: port[':guest'],
+          id:    port[':id']
+      end
+
+      config.vm.hostname = node_values[':node']
+      config.vm.network :private_network, ip: node_values[':ip']
+
+      # syncs local repository of large third-party installer files (quicker than downloading each time)
+      #config.vm.synced_folder "#{ENV['HOME']}/Documents/git_repos/chef-artifacts", "/vagrant"
+
+      config.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--memory", node_values[':memory']]
+        vb.customize ["modifyvm", :id, "--name", node_values[':node']]
+      end
+
+      # chef configuration section
+      config.vm.provision :chef_solo do |chef|
+        chef.add_recipe node_values[':chef-recipe']
+        chef.log_level = :info
+      end
+    end
+  end
+end

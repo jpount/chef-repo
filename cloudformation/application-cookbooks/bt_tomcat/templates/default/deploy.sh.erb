@@ -1,0 +1,120 @@
+#!/bin/bash -e
+#
+# This script will deploy a remote file to Tomcat
+#
+# You need to specify the remote url of the war file and the context. Default context is /
+#
+# sudo ./deploy.sh https://tomcat.apache.org/tomcat-6.0-doc/appdev/sample/sample.war /sample 
+#
+
+##
+## settings
+##
+
+usage ()
+{
+  echo 'Usage : ./deploy.sh <app-url> <properties-url> [<context> (must start with /)]'
+  exit
+}
+
+app_url=$1
+properties_url=$2
+context=$3
+tc_user="admin"
+tc_user_pwd="adminadmin"
+tc_port="<%= node['tomcat']['port'] %>"
+
+<% if node['tomcat']['base_version'].to_i > 6 %>
+tc_deploy_cmd="manager/text"
+<% else %>
+tc_deploy_cmd="manager"
+<% end %>
+
+# extra validation
+if [ "$app_url" = "" ]  
+then
+    usage
+fi
+
+if [ "$properties_url" = "" ]  
+then
+    usage
+fi
+
+if [ "$context" = "" ]
+then
+    context="/"
+fi
+
+if ! [[ $context == /* ]]
+then
+    usage
+fi
+
+echo "Using.... Artifact=$app_url,Properties=$properties_url,Context=$context"
+
+## git - where is dev_tools going to come from and dont think I need it anyway
+#git -C %dev.tools% describe --all --long
+
+## Assume that curl and wget is installed (done in the recipe)
+
+## get the application file - cant use sudo at the moment
+echo '## download the app file'
+curl -o ~/barista.zip $app_url
+echo '## download the properties file'
+curl -o ~/batteries.zip $properties_url
+
+echo '## unzip the application files'
+cd ~/
+jar xvf barista.zip
+jar xvf artifact/ear/nextgen-ui-*.ear nextgen.war
+
+echo '## clear the properties directory'
+rm -rf <%= node["tomcat"]["home"] %>/properties/*
+
+echo '## extract the app properties'
+rm -rf props
+mkdir -p props
+cd props
+jar xvf ../batteries.zip
+
+echo '## copy the properties to tomcat'
+cp -a ~/props/* <%= node["tomcat"]["home"] %>/properties
+
+cd ~/
+echo '## copy the base settings to tomcat'
+cp -a configuration/base/application/* <%= node["tomcat"]["home"] %>/properties
+ 
+echo "## environment specific ci2 ..."
+cp -a configuration/environment/ci2/application/* <%= node["tomcat"]["home"] %>/properties
+ 
+# use copy to deploy
+echo "## Copy the war..."
+rm -rf <%= node["tomcat"]["webapp_dir"] %>/nextgen
+cp ~/nextgen.war <%= node["tomcat"]["webapp_dir"] %>
+
+echo "## Clean up..."
+rm -rf ~/barista.zip
+rm -rf ~/batteries.zip
+rm -rf ~/artifact*
+rm -rf ~/configuration*
+rm -rf ~/props
+rm -rf ~/nextgen*
+rm -rf ~/META-INF
+
+#
+# Use the Tomcat manager
+#
+## undeploy first
+#echo '## undeploy first - ignore failure'
+#wget --http-user=$tc_user --http-password=$tc_user_pwd "localhost:$tc_port/$tc_deploy_cmd/undeploy?path=$context" -O - || true
+
+## deploy
+#echo '## deploy'
+#wget --http-user=$tc_user --http-password=$tc_user_pwd "localhost:$tc_port/$tc_deploy_cmd/deploy?war=file:~/ROOT.war&path=$context" -O -
+
+#echo "## Restarting Server..."
+#service tomcat<%= node["tomcat"]["base_version"] %> restart
+
+echo '## done'
+

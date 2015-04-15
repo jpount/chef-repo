@@ -1,0 +1,155 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"Launches Git",
+  "Parameters":{  
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName",
+      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription":"must be the name of an existing EC2 KeyPair."
+    },
+    "VPCId":{  
+      "Type":"AWS::EC2::VPC::Id",
+      "Description":"Name of an existing VPC to house the instances",
+      "ConstraintDescription":"must be the name of an existing VPC"
+    },
+    "SubnetId":{  
+      "Type":"List<AWS::EC2::Subnet::Id>",
+      "Description":"Name of an existing Subnet to house the instances",
+      "ConstraintDescription":"must be the name of an existing Subnet"
+    },
+    "HostedZone" : {
+      "Type" : "String",
+      "Description" : "The DNS name of an existing Amazon Route 53 hosted zone (do not include trailing .)",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "InstanceType" : {
+      "Description" : "Git EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "DnsPrefix" : {
+      "Type" : "String",
+      "Description" : "Git DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "AMI":{  
+      "Type":"String",
+      "Description":"Git AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-89c9b9b3",
+      "AllowedValues":[  
+        "ami-89c9b9b3"
+      ]
+    },
+    "SSHLocation":{  
+      "Type":"String",
+      "Description":" The IP address range that can be used to SSH to the EC2 instances",
+      "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default":"0.0.0.0/0",
+      "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "MaxLength":18,
+      "MinLength":9
+    }
+  },
+  "Resources":{  
+    "EC2Instance":{  
+      "Type":"AWS::EC2::Instance",
+      "Properties":{  
+        "ImageId":{  
+          "Ref":"AMI"
+        },
+        "InstanceType":{  
+          "Ref":"InstanceType"
+        },
+        "KeyName":{  
+          "Ref":"KeyName"
+        },
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "SecurityGroupIds":[  
+          {  
+            "Ref":"InstanceSecurityGroup"
+          }
+        ]
+      }
+    },
+
+    "GitDNSRecord" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" : {
+        "HostedZoneName" : { "Fn::Join" : [ "", [{"Ref" : "HostedZone"}, "." ]]},
+        "Name" : { "Fn::Join" : [ "", [{"Ref" : "DnsPrefix"}, ".", {"Ref" : "HostedZone"} ,"."]]},
+        "Type" : "A",
+        "TTL" : "60",
+        "ResourceRecords" : [ { "Fn::GetAtt" : [ "EC2Instance", "PrivateIp" ] } ]
+      }
+    },
+
+    "InstanceSecurityGroup":{  
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{  
+        "VpcId": {
+          "Ref": "VPCId"
+        },
+        "GroupDescription":"Enable SSH access",
+        "SecurityGroupIngress":[  
+          {  
+            "CidrIp":{  
+              "Ref":"SSHLocation"
+            },
+            "FromPort":"22",
+            "IpProtocol":"tcp",
+            "ToPort":"22"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs":{  
+    "AZ":{  
+      "Description":"Availability Zone of the newly created EC2 instance",
+      "Value":{  
+        "Fn::GetAtt":[  
+          "EC2Instance",
+          "AvailabilityZone"
+        ]
+      }
+    },
+    "PrivateDNS":{  
+      "Description":"Private DNSName of the newly created EC2 instance",
+      "Value":{  
+        "Fn::GetAtt":[  
+          "EC2Instance",
+          "PrivateDnsName"
+        ]
+      }
+    },
+    "PrivateIP":{  
+      "Description":"Private IP address of the newly created EC2 instance",
+      "Value":{  
+        "Fn::GetAtt":[  
+          "EC2Instance",
+          "PrivateIp"
+        ]
+      }
+    },
+    "R53DNS":{  
+      "Description":"The Route53 DNS of the newly created EC2 instance",
+      "Value":{  
+        "Ref":"GitDNSRecord"  
+      }
+    },
+    "SecurityGroupId" : {
+      "Value" : { "Ref" : "InstanceSecurityGroup" },
+      "Description" : "Security Group of instance"
+    }
+  }
+
+}
+

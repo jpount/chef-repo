@@ -1,0 +1,48 @@
+{
+  "variables": {
+    "account_id": "",
+    "aws_access_key_id": "",
+    "aws_secret_key": "",
+    "aws_region": "ap-southeast-2",
+    "s3_bucket": "",
+    "x509_cert_path": "",
+    "x509_key_path": ""
+  },
+
+  "builders": [
+    { "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key_id`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "ap-southeast-2",
+      "source_ami": "ami-d3daace9",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "base_image_rhel_ebs_packer_{{timestamp}}",
+      "tags": {
+		"Name": "BT Base image",
+		"Release": "Dev",
+		"Cost Centre": "Pan Dev Ops"
+      }
+    }
+  ],
+
+  "provisioners" : [ 
+    { "type": "chef-solo",
+      "environments_path": "./environments",
+      "chef_environment": "cloud",
+      "cookbook_paths": [ "./berks-cookbooks" ],
+      "roles_path": "./roles",
+      "data_bags_path": "./data_bags",
+      "run_list": [ "role[base_image]", "bt_awscli::default" ]
+    },
+    { "type": "file", 
+      "source": "tests", 
+      "destination": "/tmp" 
+    },
+    { "type": "shell", 
+      "script": "tests/scripts/serverspec.sh" 
+    },
+    { "type": "shell", "inline": ["rm -rf /tmp/tests"] } 
+  ]
+
+}

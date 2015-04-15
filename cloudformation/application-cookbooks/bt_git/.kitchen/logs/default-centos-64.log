@@ -1,0 +1,401 @@
+I, [2015-04-04T17:04:27.782239 #5865]  INFO -- default-centos-64: -----> Creating <default-centos-64>...
+I, [2015-04-04T17:04:27.788325 #5865]  INFO -- default-centos-64: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/mixlib-shellout-2.0.1/lib/mixlib/shellout/unix.rb:305: warning: Insecure world writable dir /home/john/apps in PATH, mode 040777
+I, [2015-04-04T17:04:27.899506 #5865]  INFO -- default-centos-64: /opt/vagrant/bin/../embedded/gems/gems/vagrant-1.6.3/lib/vagrant/pre-rubygems.rb:31: warning: Insecure world writable dir /home/john/apps in PATH, mode 040777
+I, [2015-04-04T17:04:28.180560 #5865]  INFO -- default-centos-64: /opt/vagrant/embedded/gems/gems/bundler-1.6.2/lib/bundler/runtime.rb:222: warning: Insecure world writable dir /home/john/apps in PATH, mode 040777
+I, [2015-04-04T17:04:28.801242 #5865]  INFO -- default-centos-64: Bringing machine 'default' up with 'virtualbox' provider...
+I, [2015-04-04T17:04:29.147999 #5865]  INFO -- default-centos-64: ==> default: Importing base box 'opscode-centos-6.4'...
+I, [2015-04-04T17:04:57.513602 #5865]  INFO -- default-centos-64: [KProgress: 10%[KProgress: 40%[KProgress: 50%[KProgress: 60%[KProgress: 70%[KProgress: 80%[KProgress: 90%[K==> default: Matching MAC address for NAT networking...
+I, [2015-04-04T17:04:58.106483 #5865]  INFO -- default-centos-64: ==> default: Setting the name of the VM: default-centos-64_default_1428127498065_90271
+I, [2015-04-04T17:04:58.627178 #5865]  INFO -- default-centos-64: ==> default: Fixed port collision for 22 => 2222. Now on port 2200.
+I, [2015-04-04T17:04:58.698163 #5865]  INFO -- default-centos-64: ==> default: Clearing any previously set network interfaces...
+I, [2015-04-04T17:04:58.811596 #5865]  INFO -- default-centos-64: ==> default: Preparing network interfaces based on configuration...
+I, [2015-04-04T17:04:58.811717 #5865]  INFO -- default-centos-64:     default: Adapter 1: nat
+I, [2015-04-04T17:04:58.933585 #5865]  INFO -- default-centos-64: ==> default: Forwarding ports...
+I, [2015-04-04T17:04:58.982845 #5865]  INFO -- default-centos-64:     default: 22 => 2200 (adapter 1)
+I, [2015-04-04T17:05:16.997504 #5865]  INFO -- default-centos-64: ==> default: Booting VM...
+I, [2015-04-04T17:05:17.742114 #5865]  INFO -- default-centos-64: ==> default: Waiting for machine to boot. This may take a few minutes...    default: SSH address: 127.0.0.1:2200
+I, [2015-04-04T17:05:17.742376 #5865]  INFO -- default-centos-64:     default: SSH username: vagrant
+I, [2015-04-04T17:05:17.742589 #5865]  INFO -- default-centos-64:     default: SSH auth method: private key
+I, [2015-04-04T17:05:32.882124 #5865]  INFO -- default-centos-64:     default: Warning: Connection timeout. Retrying...
+I, [2015-04-04T17:05:34.372520 #5865]  INFO -- default-centos-64: ==> default: Machine booted and ready!
+I, [2015-04-04T17:05:35.577162 #5865]  INFO -- default-centos-64: GuestAdditions versions on your host (4.3.10) and guest (4.3.2) do not match.
+I, [2015-04-04T17:05:36.076037 #5865]  INFO -- default-centos-64: Loaded plugins: fastestmirror, security
+I, [2015-04-04T17:05:36.114397 #5865]  INFO -- default-centos-64: Determining fastest mirrors
+I, [2015-04-04T17:05:43.014008 #5865]  INFO -- default-centos-64:  * base: centos.mirror.uber.com.au
+I, [2015-04-04T17:05:43.014142 #5865]  INFO -- default-centos-64:  * extras: centos.mirror.uber.com.au
+I, [2015-04-04T17:05:43.014208 #5865]  INFO -- default-centos-64:  * updates: centos.mirror.uber.com.au
+I, [2015-04-04T17:05:54.914598 #5865]  INFO -- default-centos-64: Setting up Install Process
+I, [2015-04-04T17:05:58.171221 #5865]  INFO -- default-centos-64: Package 1:make-3.81-20.el6.x86_64 already installed and latest version
+I, [2015-04-04T17:05:58.178515 #5865]  INFO -- default-centos-64: Resolving Dependencies
+I, [2015-04-04T17:05:58.218498 #5865]  INFO -- default-centos-64: --> Running transaction check
+I, [2015-04-04T17:05:58.218942 #5865]  INFO -- default-centos-64: ---> Package gcc.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.252553 #5865]  INFO -- default-centos-64: --> Processing Dependency: gcc = 4.4.7-3.el6 for package: gcc-gfortran-4.4.7-3.el6.x86_64
+I, [2015-04-04T17:05:58.253754 #5865]  INFO -- default-centos-64: --> Processing Dependency: gcc = 4.4.7-3.el6 for package: gcc-c++-4.4.7-3.el6.x86_64
+I, [2015-04-04T17:05:58.256106 #5865]  INFO -- default-centos-64: ---> Package gcc.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.264292 #5865]  INFO -- default-centos-64: --> Processing Dependency: libgomp = 4.4.7-11.el6 for package: gcc-4.4.7-11.el6.x86_64
+I, [2015-04-04T17:05:58.267433 #5865]  INFO -- default-centos-64: --> Processing Dependency: cpp = 4.4.7-11.el6 for package: gcc-4.4.7-11.el6.x86_64
+I, [2015-04-04T17:05:58.268830 #5865]  INFO -- default-centos-64: --> Processing Dependency: libgcc >= 4.4.7-11.el6 for package: gcc-4.4.7-11.el6.x86_64
+I, [2015-04-04T17:05:58.271513 #5865]  INFO -- default-centos-64: ---> Package perl.x86_64 4:5.10.1-129.el6 will be updated
+I, [2015-04-04T17:05:58.312334 #5865]  INFO -- default-centos-64: --> Processing Dependency: perl = 4:5.10.1-129.el6 for package: 3:perl-version-0.77-129.el6.x86_64
+I, [2015-04-04T17:05:58.313500 #5865]  INFO -- default-centos-64: --> Processing Dependency: perl = 4:5.10.1-129.el6 for package: 1:perl-Module-Pluggable-3.90-129.el6.x86_64
+I, [2015-04-04T17:05:58.314781 #5865]  INFO -- default-centos-64: --> Processing Dependency: perl = 4:5.10.1-129.el6 for package: 1:perl-Pod-Simple-3.13-129.el6.x86_64
+I, [2015-04-04T17:05:58.316210 #5865]  INFO -- default-centos-64: --> Processing Dependency: perl = 4:5.10.1-129.el6 for package: 1:perl-Pod-Escapes-1.04-129.el6.x86_64
+I, [2015-04-04T17:05:58.317252 #5865]  INFO -- default-centos-64: --> Processing Dependency: perl = 4:5.10.1-129.el6 for package: 4:perl-libs-5.10.1-129.el6.x86_64
+I, [2015-04-04T17:05:58.318648 #5865]  INFO -- default-centos-64: ---> Package perl.x86_64 4:5.10.1-136.el6_6.1 will be an update
+I, [2015-04-04T17:05:58.319645 #5865]  INFO -- default-centos-64: --> Running transaction check
+I, [2015-04-04T17:05:58.320095 #5865]  INFO -- default-centos-64: ---> Package cpp.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.321166 #5865]  INFO -- default-centos-64: ---> Package cpp.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.321546 #5865]  INFO -- default-centos-64: ---> Package gcc-c++.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.322324 #5865]  INFO -- default-centos-64: ---> Package gcc-c++.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.327099 #5865]  INFO -- default-centos-64: --> Processing Dependency: libstdc++-devel = 4.4.7-11.el6 for package: gcc-c++-4.4.7-11.el6.x86_64
+I, [2015-04-04T17:05:58.330009 #5865]  INFO -- default-centos-64: --> Processing Dependency: libstdc++ = 4.4.7-11.el6 for package: gcc-c++-4.4.7-11.el6.x86_64
+I, [2015-04-04T17:05:58.332778 #5865]  INFO -- default-centos-64: ---> Package gcc-gfortran.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.335515 #5865]  INFO -- default-centos-64: ---> Package gcc-gfortran.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.337478 #5865]  INFO -- default-centos-64: --> Processing Dependency: libgfortran = 4.4.7-11.el6 for package: gcc-gfortran-4.4.7-11.el6.x86_64
+I, [2015-04-04T17:05:58.340436 #5865]  INFO -- default-centos-64: ---> Package libgcc.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.342033 #5865]  INFO -- default-centos-64: ---> Package libgcc.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.342573 #5865]  INFO -- default-centos-64: ---> Package libgomp.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.458496 #5865]  INFO -- default-centos-64: ---> Package libgomp.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.459470 #5865]  INFO -- default-centos-64: ---> Package perl-Module-Pluggable.x86_64 1:3.90-129.el6 will be updated
+I, [2015-04-04T17:05:58.461082 #5865]  INFO -- default-centos-64: ---> Package perl-Module-Pluggable.x86_64 1:3.90-136.el6_6.1 will be an update
+I, [2015-04-04T17:05:58.463278 #5865]  INFO -- default-centos-64: ---> Package perl-Pod-Escapes.x86_64 1:1.04-129.el6 will be updated
+I, [2015-04-04T17:05:58.464647 #5865]  INFO -- default-centos-64: ---> Package perl-Pod-Escapes.x86_64 1:1.04-136.el6_6.1 will be an update
+I, [2015-04-04T17:05:58.465648 #5865]  INFO -- default-centos-64: ---> Package perl-Pod-Simple.x86_64 1:3.13-129.el6 will be updated
+I, [2015-04-04T17:05:58.466427 #5865]  INFO -- default-centos-64: ---> Package perl-Pod-Simple.x86_64 1:3.13-136.el6_6.1 will be an update
+I, [2015-04-04T17:05:58.466923 #5865]  INFO -- default-centos-64: ---> Package perl-libs.x86_64 4:5.10.1-129.el6 will be updated
+I, [2015-04-04T17:05:58.493531 #5865]  INFO -- default-centos-64: ---> Package perl-libs.x86_64 4:5.10.1-136.el6_6.1 will be an update
+I, [2015-04-04T17:05:58.494874 #5865]  INFO -- default-centos-64: ---> Package perl-version.x86_64 3:0.77-129.el6 will be updated
+I, [2015-04-04T17:05:58.496576 #5865]  INFO -- default-centos-64: ---> Package perl-version.x86_64 3:0.77-136.el6_6.1 will be an update
+I, [2015-04-04T17:05:58.497404 #5865]  INFO -- default-centos-64: --> Running transaction check
+I, [2015-04-04T17:05:58.498468 #5865]  INFO -- default-centos-64: ---> Package libgfortran.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.500598 #5865]  INFO -- default-centos-64: ---> Package libgfortran.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.501461 #5865]  INFO -- default-centos-64: ---> Package libstdc++.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.503245 #5865]  INFO -- default-centos-64: ---> Package libstdc++.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:58.503565 #5865]  INFO -- default-centos-64: ---> Package libstdc++-devel.x86_64 0:4.4.7-3.el6 will be updated
+I, [2015-04-04T17:05:58.504481 #5865]  INFO -- default-centos-64: ---> Package libstdc++-devel.x86_64 0:4.4.7-11.el6 will be an update
+I, [2015-04-04T17:05:59.333665 #5865]  INFO -- default-centos-64: --> Finished Dependency Resolution
+I, [2015-04-04T17:05:59.357539 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:05:59.357603 #5865]  INFO -- default-centos-64: Dependencies Resolved
+I, [2015-04-04T17:05:59.361626 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:05:59.361670 #5865]  INFO -- default-centos-64: ================================================================================
+I, [2015-04-04T17:05:59.361717 #5865]  INFO -- default-centos-64:  Package                  Arch      Version                    Repository  Size
+I, [2015-04-04T17:05:59.361785 #5865]  INFO -- default-centos-64: ================================================================================
+I, [2015-04-04T17:05:59.361812 #5865]  INFO -- default-centos-64: Updating:
+I, [2015-04-04T17:05:59.361829 #5865]  INFO -- default-centos-64:  gcc                      x86_64    4.4.7-11.el6               base        10 M
+I, [2015-04-04T17:05:59.361845 #5865]  INFO -- default-centos-64:  perl                     x86_64    4:5.10.1-136.el6_6.1       updates     10 M
+I, [2015-04-04T17:05:59.361879 #5865]  INFO -- default-centos-64: Updating for dependencies:
+I, [2015-04-04T17:05:59.361896 #5865]  INFO -- default-centos-64:  cpp                      x86_64    4.4.7-11.el6               base       3.7 M
+I, [2015-04-04T17:05:59.361916 #5865]  INFO -- default-centos-64:  gcc-c++                  x86_64    4.4.7-11.el6               base       4.7 M
+I, [2015-04-04T17:05:59.361932 #5865]  INFO -- default-centos-64:  gcc-gfortran             x86_64    4.4.7-11.el6               base       4.7 M
+I, [2015-04-04T17:05:59.361949 #5865]  INFO -- default-centos-64:  libgcc                   x86_64    4.4.7-11.el6               base       102 k
+I, [2015-04-04T17:05:59.361965 #5865]  INFO -- default-centos-64:  libgfortran              x86_64    4.4.7-11.el6               base       267 k
+I, [2015-04-04T17:05:59.361981 #5865]  INFO -- default-centos-64:  libgomp                  x86_64    4.4.7-11.el6               base       133 k
+I, [2015-04-04T17:05:59.361997 #5865]  INFO -- default-centos-64:  libstdc++                x86_64    4.4.7-11.el6               base       294 k
+I, [2015-04-04T17:05:59.362022 #5865]  INFO -- default-centos-64:  libstdc++-devel          x86_64    4.4.7-11.el6               base       1.6 M
+I, [2015-04-04T17:05:59.362042 #5865]  INFO -- default-centos-64:  perl-Module-Pluggable    x86_64    1:3.90-136.el6_6.1         updates     40 k
+I, [2015-04-04T17:05:59.362058 #5865]  INFO -- default-centos-64:  perl-Pod-Escapes         x86_64    1:1.04-136.el6_6.1         updates     32 k
+I, [2015-04-04T17:05:59.362074 #5865]  INFO -- default-centos-64:  perl-Pod-Simple          x86_64    1:3.13-136.el6_6.1         updates    212 k
+I, [2015-04-04T17:05:59.362090 #5865]  INFO -- default-centos-64:  perl-libs                x86_64    4:5.10.1-136.el6_6.1       updates    578 k
+I, [2015-04-04T17:05:59.362106 #5865]  INFO -- default-centos-64:  perl-version             x86_64    3:0.77-136.el6_6.1         updates     51 k
+I, [2015-04-04T17:05:59.362121 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:05:59.362149 #5865]  INFO -- default-centos-64: Transaction Summary
+I, [2015-04-04T17:05:59.362165 #5865]  INFO -- default-centos-64: ================================================================================
+I, [2015-04-04T17:05:59.362184 #5865]  INFO -- default-centos-64: Upgrade      15 Package(s)
+I, [2015-04-04T17:05:59.362545 #5865]  INFO -- default-centos-64: Total download size: 37 M
+I, [2015-04-04T17:05:59.362565 #5865]  INFO -- default-centos-64: Downloading Packages:
+I, [2015-04-04T17:06:32.281654 #5865]  INFO -- default-centos-64: --------------------------------------------------------------------------------
+I, [2015-04-04T17:06:32.282198 #5865]  INFO -- default-centos-64: Total                                           1.1 MB/s |  37 MB     00:32     
+I, [2015-04-04T17:06:32.322364 #5865]  INFO -- default-centos-64: warning: rpmts_HdrFromFdno: Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY
+I, [2015-04-04T17:06:32.322684 #5865]  INFO -- default-centos-64: Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+I, [2015-04-04T17:06:32.323041 #5865]  INFO -- default-centos-64: Importing GPG key 0xC105B9DE:
+I, [2015-04-04T17:06:32.323078 #5865]  INFO -- default-centos-64:  Userid : CentOS-6 Key (CentOS 6 Official Signing Key) <centos-6-key@centos.org>
+I, [2015-04-04T17:06:32.323102 #5865]  INFO -- default-centos-64:  Package: centos-release-6-4.el6.centos.10.x86_64 (@anaconda-CentOS-201303020151.x86_64/6.4)
+I, [2015-04-04T17:06:32.323119 #5865]  INFO -- default-centos-64:  From   : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+I, [2015-04-04T17:06:32.325059 #5865]  INFO -- default-centos-64: Running rpm_check_debug
+I, [2015-04-04T17:06:32.424223 #5865]  INFO -- default-centos-64: Running Transaction Test
+I, [2015-04-04T17:06:32.608626 #5865]  INFO -- default-centos-64: Transaction Test Succeeded
+I, [2015-04-04T17:06:32.678138 #5865]  INFO -- default-centos-64: Running Transaction
+I, [2015-04-04T17:06:32.986424 #5865]  INFO -- default-centos-64:   Updating   : libgcc-4.4.7-11.el6.x86_64                                  1/30 
+I, [2015-04-04T17:06:33.509398 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:33.649087 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:33.686891 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:33.775316 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:33.838206 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:33.931301 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:35.996100 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:36.489267 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:36.572197 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:36.621024 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:37.284250 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:37.776859 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.335839 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.374283 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.403500 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.423976 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.463731 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.475866 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.502208 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.512433 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.523097 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.545801 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.614312 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.646882 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.676738 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.706215 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.725147 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.744875 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.791565 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.798218 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.803473 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.807878 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.812512 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.817915 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.822440 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.826881 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.831322 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.836204 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.841004 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.845356 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.850107 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.854558 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.859728 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.864172 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.865245 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.865977 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.866541 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.867010 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.867543 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.868070 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.868602 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.869144 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.869646 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.870234 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.870779 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.871255 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.871769 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.872252 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.933016 #5865]  INFO -- default-centos-64:  
+I, [2015-04-04T17:06:38.933081 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:06:38.933101 #5865]  INFO -- default-centos-64: Updated:
+I, [2015-04-04T17:06:38.933120 #5865]  INFO -- default-centos-64:   gcc.x86_64 0:4.4.7-11.el6           perl.x86_64 4:5.10.1-136.el6_6.1          
+I, [2015-04-04T17:06:38.933137 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:06:38.933154 #5865]  INFO -- default-centos-64: Dependency Updated:
+I, [2015-04-04T17:06:38.933172 #5865]  INFO -- default-centos-64:   cpp.x86_64 0:4.4.7-11.el6                                                     
+I, [2015-04-04T17:06:38.933191 #5865]  INFO -- default-centos-64:   gcc-c++.x86_64 0:4.4.7-11.el6                                                 
+I, [2015-04-04T17:06:38.933209 #5865]  INFO -- default-centos-64:   gcc-gfortran.x86_64 0:4.4.7-11.el6                                            
+I, [2015-04-04T17:06:38.933227 #5865]  INFO -- default-centos-64:   libgcc.x86_64 0:4.4.7-11.el6                                                  
+I, [2015-04-04T17:06:38.933245 #5865]  INFO -- default-centos-64:   libgfortran.x86_64 0:4.4.7-11.el6                                             
+I, [2015-04-04T17:06:38.933273 #5865]  INFO -- default-centos-64:   libgomp.x86_64 0:4.4.7-11.el6                                                 
+I, [2015-04-04T17:06:38.933292 #5865]  INFO -- default-centos-64:   libstdc++.x86_64 0:4.4.7-11.el6                                               
+I, [2015-04-04T17:06:38.933311 #5865]  INFO -- default-centos-64:   libstdc++-devel.x86_64 0:4.4.7-11.el6                                         
+I, [2015-04-04T17:06:38.933355 #5865]  INFO -- default-centos-64:   perl-Module-Pluggable.x86_64 1:3.90-136.el6_6.1                               
+I, [2015-04-04T17:06:38.933374 #5865]  INFO -- default-centos-64:   perl-Pod-Escapes.x86_64 1:1.04-136.el6_6.1                                    
+I, [2015-04-04T17:06:38.933392 #5865]  INFO -- default-centos-64:   perl-Pod-Simple.x86_64 1:3.13-136.el6_6.1                                     
+I, [2015-04-04T17:06:38.933410 #5865]  INFO -- default-centos-64:   perl-libs.x86_64 4:5.10.1-136.el6_6.1                                         
+I, [2015-04-04T17:06:38.933428 #5865]  INFO -- default-centos-64:   perl-version.x86_64 3:0.77-136.el6_6.1                                        
+I, [2015-04-04T17:06:38.933684 #5865]  INFO -- default-centos-64: Complete!
+I, [2015-04-04T17:06:39.056214 #5865]  INFO -- default-centos-64: Copy iso file /usr/share/virtualbox/VBoxGuestAdditions.iso into the box /tmp/VBoxGuestAdditions.iso
+I, [2015-04-04T17:06:42.512286 #5865]  INFO -- default-centos-64: Installing Virtualbox Guest Additions 4.3.10 - guest version is 4.3.2
+I, [2015-04-04T17:06:42.650240 #5865]  INFO -- default-centos-64: Verifying archive integrity... All good.
+I, [2015-04-04T17:06:42.742143 #5865]  INFO -- default-centos-64: Uncompressing VirtualBox 4.3.10 Guest Additions for Linux............VirtualBox Guest Additions installer
+I, [2015-04-04T17:06:42.787016 #5865]  INFO -- default-centos-64: Removing installed version 4.3.2 of VirtualBox Guest Additions...
+I, [2015-04-04T17:06:46.696503 #5865]  INFO -- default-centos-64: Copying additional installer modules ...
+I, [2015-04-04T17:06:48.024744 #5865]  INFO -- default-centos-64: Installing additional modules ...
+I, [2015-04-04T17:06:48.290698 #5865]  INFO -- default-centos-64: Removing existing VirtualBox non-DKMS kernel modules[  OK  ]
+I, [2015-04-04T17:07:13.698060 #5865]  INFO -- default-centos-64: Building the main Guest Additions module[  OK  ]
+I, [2015-04-04T17:07:17.239882 #5865]  INFO -- default-centos-64: [  OK  ]
+I, [2015-04-04T17:07:18.399406 #5865]  INFO -- default-centos-64: Building the OpenGL support module[  OK  ]
+I, [2015-04-04T17:07:19.102775 #5865]  INFO -- default-centos-64: Doing non-kernel setup of the Guest Additions[  OK  ]
+I, [2015-04-04T17:07:19.109479 #5865]  INFO -- default-centos-64: You should restart your guest to make sure the new modules are actually used
+I, [2015-04-04T17:07:19.252189 #5865]  INFO -- default-centos-64: Installing the Window System drivers
+I, [2015-04-04T17:07:19.252240 #5865]  INFO -- default-centos-64: Could not find the X.Org or XFree86 Window System, skipping.
+I, [2015-04-04T17:07:19.406894 #5865]  INFO -- default-centos-64: An error occurred during installation of VirtualBox Guest Additions 4.3.10. Some functionality may not work as intended.
+I, [2015-04-04T17:07:19.406997 #5865]  INFO -- default-centos-64: In most cases it is OK that the "Window System drivers" installation failed.
+I, [2015-04-04T17:07:20.043998 #5865]  INFO -- default-centos-64: ==> default: Checking for guest additions in VM...
+I, [2015-04-04T17:07:20.085705 #5865]  INFO -- default-centos-64: ==> default: Checking for host entries
+I, [2015-04-04T17:07:20.085951 #5865]  INFO -- default-centos-64: ==> default: Setting hostname...
+I, [2015-04-04T17:07:26.387724 #5865]  INFO -- default-centos-64: ==> default: Machine not provisioning because `--no-provision` is specified.
+I, [2015-04-04T17:07:27.647199 #5865]  INFO -- default-centos-64: Vagrant instance <default-centos-64> created.
+I, [2015-04-04T17:07:27.649299 #5865]  INFO -- default-centos-64: Finished creating <default-centos-64> (2m59.86s).
+I, [2015-04-04T17:07:27.649477 #5865]  INFO -- default-centos-64: -----> Converging <default-centos-64>...
+I, [2015-04-04T17:07:27.650402 #5865]  INFO -- default-centos-64: Preparing files for transfer
+I, [2015-04-04T17:07:27.650520 #5865]  INFO -- default-centos-64: Preparing dna.json
+I, [2015-04-04T17:07:27.650878 #5865]  INFO -- default-centos-64: Resolving cookbook dependencies with Berkshelf 3.2.3...
+I, [2015-04-04T17:07:29.366767 #5865]  INFO -- default-centos-64: Removing non-cookbook files before transfer
+I, [2015-04-04T17:07:29.369757 #5865]  INFO -- default-centos-64: Preparing solo.rb
+I, [2015-04-04T17:07:29.787130 #5865]  INFO -- default-centos-64: -----> Installing Chef Omnibus (install only if missing)
+I, [2015-04-04T17:07:29.787209 #5865]  INFO -- default-centos-64: downloading https://www.chef.io/chef/install.sh
+I, [2015-04-04T17:07:29.787235 #5865]  INFO -- default-centos-64:   to file /tmp/install.sh
+I, [2015-04-04T17:07:29.787255 #5865]  INFO -- default-centos-64: trying wget...
+I, [2015-04-04T17:07:35.176224 #5865]  INFO -- default-centos-64: trying curl...
+I, [2015-04-04T17:07:40.420922 #5865]  INFO -- default-centos-64:   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+I, [2015-04-04T17:07:40.421019 #5865]  INFO -- default-centos-64:                           Dload  Upload   Total   Spent    Left  Speed
+I, [2015-04-04T17:07:40.458393 #5865]  INFO -- default-centos-64: 100 18358  100 18358    0     0   3487      0  0:00:05  0:00:05 --:--:--  484k
+I, [2015-04-04T17:07:40.478614 #5865]  INFO -- default-centos-64: Downloading Chef  for el...
+I, [2015-04-04T17:07:40.478691 #5865]  INFO -- default-centos-64: downloading https://www.chef.io/chef/metadata?v=&prerelease=false&nightlies=false&p=el&pv=6&m=x86_64
+I, [2015-04-04T17:07:40.478720 #5865]  INFO -- default-centos-64:   to file /tmp/install.sh.7311/metadata.txt
+I, [2015-04-04T17:07:40.478746 #5865]  INFO -- default-centos-64: trying wget...
+I, [2015-04-04T17:07:45.602902 #5865]  INFO -- default-centos-64: trying curl...
+I, [2015-04-04T17:07:50.805964 #5865]  INFO -- default-centos-64: url	https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-12.2.1-1.el6.x86_64.rpm
+I, [2015-04-04T17:07:50.806051 #5865]  INFO -- default-centos-64: md5	750c9509b04f3b8bb997bab2bb1831ee
+I, [2015-04-04T17:07:50.806083 #5865]  INFO -- default-centos-64: sha256	e428180890b381382caa71f726e5790bbc1b86551050ae214bb1a9812373f2a3
+I, [2015-04-04T17:07:50.808182 #5865]  INFO -- default-centos-64: downloaded metadata file looks valid...
+I, [2015-04-04T17:07:50.814238 #5865]  INFO -- default-centos-64: downloading https://opscode-omnibus-packages.s3.amazonaws.com/el/6/x86_64/chef-12.2.1-1.el6.x86_64.rpm
+I, [2015-04-04T17:07:50.814270 #5865]  INFO -- default-centos-64:   to file /tmp/install.sh.7311/chef-12.2.1-1.el6.x86_64.rpm
+I, [2015-04-04T17:07:50.814287 #5865]  INFO -- default-centos-64: trying wget...
+I, [2015-04-04T17:11:26.076902 #5865]  INFO -- default-centos-64: Comparing checksum with sha256sum...
+I, [2015-04-04T17:11:27.008201 #5865]  INFO -- default-centos-64: Installing Chef 
+I, [2015-04-04T17:11:27.008282 #5865]  INFO -- default-centos-64: installing with rpm...
+I, [2015-04-04T17:11:27.090807 #5865]  INFO -- default-centos-64: warning: /tmp/install.sh.7311/chef-12.2.1-1.el6.x86_64.rpm: Header V4 DSA/SHA1 Signature, key ID 83ef826a: NOKEY
+I, [2015-04-04T17:11:28.711765 #5865]  INFO -- default-centos-64: Preparing...                                                            (100%)#                                           (100%)##                                          (100%)###                                         (100%)####                                        (100%)#####                                       (100%)######                                      (100%)#######                                     (100%)########                                    (100%)#########                                   (100%)##########                                  (100%)###########                                 (100%)############                                (100%)#############                               (100%)##############                              (100%)###############                             (100%)################                            (100%)#################                           (100%)##################                          (100%)###################                         (100%)####################                        (100%)#####################                       (100%)######################                      (100%)#######################                     (100%)########################                    (100%)#########################                   (100%)##########################                  (100%)###########################                 (100%)############################                (100%)#############################               (100%)##############################              (100%)###############################             (100%)################################            (100%)#################################           (100%)##################################          (100%)###################################         (100%)####################################        (100%)#####################################       (100%)######################################      (100%)#######################################     (100%)########################################    (100%)#########################################   (100%)##########################################  (100%)########################################### (100%)########################################### [100%]
+I, [2015-04-04T17:11:32.824362 #5865]  INFO -- default-centos-64:    1:chef                                                               (  1%)#                                           (  3%)##                                          (  6%)###                                         (  8%)####                                        ( 10%)#####                                       ( 13%)######                                      ( 15%)#######                                     ( 17%)########                                    ( 19%)#########                                   ( 22%)##########                                  ( 24%)###########                                 ( 26%)############                                ( 28%)#############                               ( 31%)##############                              ( 33%)###############                             ( 35%)################                            ( 38%)#################                           ( 40%)##################                          ( 42%)###################                         ( 44%)####################                        ( 47%)#####################                       ( 49%)######################                      ( 51%)#######################                     ( 53%)########################                    ( 56%)#########################                   ( 58%)##########################                  ( 60%)###########################                 ( 63%)############################                ( 65%)#############################               ( 67%)##############################              ( 69%)###############################             ( 72%)################################            ( 74%)#################################           ( 76%)##################################          ( 78%)###################################         ( 81%)####################################        ( 83%)#####################################       ( 85%)######################################      ( 88%)#######################################     ( 90%)########################################    ( 92%)#########################################   ( 94%)##########################################  ( 97%)########################################### ( 99%)########################################### [100%]
+I, [2015-04-04T17:11:35.221604 #5865]  INFO -- default-centos-64: Thank you for installing Chef!
+I, [2015-04-04T17:11:35.286080 #5865]  INFO -- default-centos-64: Transferring files to <default-centos-64>
+I, [2015-04-04T17:11:42.670585 #5865]  INFO -- default-centos-64: Starting Chef Client, version 12.2.1
+I, [2015-04-04T17:11:49.004910 #5865]  INFO -- default-centos-64: Compiling Cookbooks...
+I, [2015-04-04T17:11:49.035982 #5865]  INFO -- default-centos-64: Converging 4 resources
+I, [2015-04-04T17:11:49.036051 #5865]  INFO -- default-centos-64: Recipe: yum::default
+I, [2015-04-04T17:11:49.037760 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:11:49.052381 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:11:49.052435 #5865]  INFO -- default-centos-64:       - update content in file /etc/yum.conf from a403d7 to 31c39a
+I, [2015-04-04T17:11:49.052473 #5865]  INFO -- default-centos-64:       --- /etc/yum.conf	2013-02-22 11:26:34.000000000 +0000
+I, [2015-04-04T17:11:49.052492 #5865]  INFO -- default-centos-64:       +++ /tmp/chef-rendered-template20150404-7426-6c8hjy	2015-04-04 06:11:48.273807059 +0000
+I, [2015-04-04T17:11:49.052507 #5865]  INFO -- default-centos-64:       @@ -1,26 +1,15 @@
+I, [2015-04-04T17:11:49.052522 #5865]  INFO -- default-centos-64:       +# This file was generated by Chef
+I, [2015-04-04T17:11:49.052537 #5865]  INFO -- default-centos-64:       +# Do NOT modify this file by hand.
+I, [2015-04-04T17:11:49.052552 #5865]  INFO -- default-centos-64:       +
+I, [2015-04-04T17:11:49.052575 #5865]  INFO -- default-centos-64: [main]
+I, [2015-04-04T17:11:49.052595 #5865]  INFO -- default-centos-64: cachedir=/var/cache/yum/$basearch/$releasever
+I, [2015-04-04T17:11:49.052610 #5865]  INFO -- default-centos-64:       -keepcache=0
+I, [2015-04-04T17:11:49.052628 #5865]  INFO -- default-centos-64: debuglevel=2
+I, [2015-04-04T17:11:49.052643 #5865]  INFO -- default-centos-64:       -logfile=/var/log/yum.log
+I, [2015-04-04T17:11:49.052659 #5865]  INFO -- default-centos-64:       +distroverpkg=centos-release
+I, [2015-04-04T17:11:49.052677 #5865]  INFO -- default-centos-64: exactarch=1
+I, [2015-04-04T17:11:49.052692 #5865]  INFO -- default-centos-64:       -obsoletes=1
+I, [2015-04-04T17:11:49.052710 #5865]  INFO -- default-centos-64: gpgcheck=1
+I, [2015-04-04T17:11:49.052726 #5865]  INFO -- default-centos-64:       +installonly_limit=3
+I, [2015-04-04T17:11:49.052740 #5865]  INFO -- default-centos-64:       +keepcache=0
+I, [2015-04-04T17:11:49.052755 #5865]  INFO -- default-centos-64:       +logfile=/var/log/yum.log
+I, [2015-04-04T17:11:49.052789 #5865]  INFO -- default-centos-64:       +obsoletes=1
+I, [2015-04-04T17:11:49.052810 #5865]  INFO -- default-centos-64: plugins=1
+I, [2015-04-04T17:11:49.052825 #5865]  INFO -- default-centos-64:       -installonly_limit=5
+I, [2015-04-04T17:11:49.052841 #5865]  INFO -- default-centos-64:       -bugtracker_url=http://bugs.centos.org/set_project.php?project_id=16&ref=http://bugs.centos.org/bug_report_page.php?category=yum
+I, [2015-04-04T17:11:49.052856 #5865]  INFO -- default-centos-64:       -distroverpkg=centos-release
+I, [2015-04-04T17:11:49.052871 #5865]  INFO -- default-centos-64:       -
+I, [2015-04-04T17:11:49.052885 #5865]  INFO -- default-centos-64:       -#  This is the default, if you make this bigger yum won't see if the metadata
+I, [2015-04-04T17:11:49.052900 #5865]  INFO -- default-centos-64:       -# is newer on the remote and so you'll "gain" the bandwidth of not having to
+I, [2015-04-04T17:11:49.052916 #5865]  INFO -- default-centos-64:       -# download the new metadata and "pay" for it by yum not having correct
+I, [2015-04-04T17:11:49.052930 #5865]  INFO -- default-centos-64:       -# information.
+I, [2015-04-04T17:11:49.052945 #5865]  INFO -- default-centos-64:       -#  It is esp. important, to have correct metadata, for distributions like
+I, [2015-04-04T17:11:49.052973 #5865]  INFO -- default-centos-64:       -# Fedora which don't keep old packages around. If you don't like this checking
+I, [2015-04-04T17:11:49.052989 #5865]  INFO -- default-centos-64:       -# interupting your command line usage, it's much better to have something
+I, [2015-04-04T17:11:49.053004 #5865]  INFO -- default-centos-64:       -# manually check the metadata once an hour (yum-updatesd will do this).
+I, [2015-04-04T17:11:49.053019 #5865]  INFO -- default-centos-64:       -# metadata_expire=90m
+I, [2015-04-04T17:11:49.053034 #5865]  INFO -- default-centos-64:       -
+I, [2015-04-04T17:11:49.053048 #5865]  INFO -- default-centos-64:       -# PUT YOUR REPOS HERE OR IN separate files named file.repo
+I, [2015-04-04T17:11:49.201965 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:11:49.203110 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:11:49.203177 #5865]  INFO -- default-centos-64:   
+I, [2015-04-04T17:11:49.204000 #5865]  INFO -- default-centos-64: Recipe: bt_ssh::default
+I, [2015-04-04T17:11:49.300090 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:11:49.300168 #5865]  INFO -- default-centos-64:     - execute ssh-keygen -t rsa -q -f /home/vagrant/.ssh/id_rsa -P ''
+I, [2015-04-04T17:11:49.300189 #5865]  INFO -- default-centos-64: Recipe: git::default
+I, [2015-04-04T17:12:02.953424 #5865]  INFO -- default-centos-64:  (up to date)
+I, [2015-04-04T17:12:02.954492 #5865]  INFO -- default-centos-64: Recipe: bt_ssh::configure_git
+I, [2015-04-04T17:12:03.131509 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:12:03.131570 #5865]  INFO -- default-centos-64:     - execute "bash"  "/tmp/chef-script20150404-7426-1b2k2hg"
+I, [2015-04-04T17:12:03.131588 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:12:03.131604 #5865]  INFO -- default-centos-64: Running handlers:
+I, [2015-04-04T17:12:03.131620 #5865]  INFO -- default-centos-64: Running handlers complete
+I, [2015-04-04T17:12:03.131636 #5865]  INFO -- default-centos-64: Chef Client finished, 4/5 resources updated in 20.481777395 seconds
+I, [2015-04-04T17:12:03.222571 #5865]  INFO -- default-centos-64: Finished converging <default-centos-64> (4m35.57s).
+I, [2015-04-04T17:12:03.222766 #5865]  INFO -- default-centos-64: -----> Setting up <default-centos-64>...
+I, [2015-04-04T17:12:40.168496 #5865]  INFO -- default-centos-64: Fetching: thor-0.19.0.gemFetching: thor-0.19.0.gem (  8%)Fetching: thor-0.19.0.gem (  9%)Fetching: thor-0.19.0.gem ( 17%)Fetching: thor-0.19.0.gem ( 18%)Fetching: thor-0.19.0.gem ( 26%)Fetching: thor-0.19.0.gem ( 27%)Fetching: thor-0.19.0.gem ( 35%)Fetching: thor-0.19.0.gem ( 36%)Fetching: thor-0.19.0.gem ( 43%)Fetching: thor-0.19.0.gem ( 45%)Fetching: thor-0.19.0.gem ( 52%)Fetching: thor-0.19.0.gem ( 54%)Fetching: thor-0.19.0.gem ( 61%)Fetching: thor-0.19.0.gem ( 63%)Fetching: thor-0.19.0.gem ( 70%)Fetching: thor-0.19.0.gem ( 72%)Fetching: thor-0.19.0.gem ( 78%)Fetching: thor-0.19.0.gem ( 81%)Fetching: thor-0.19.0.gem ( 87%)Fetching: thor-0.19.0.gem ( 90%)Fetching: thor-0.19.0.gem ( 96%)Fetching: thor-0.19.0.gem ( 99%)Fetching: thor-0.19.0.gem (100%)Fetching: thor-0.19.0.gem (100%)
+I, [2015-04-04T17:12:40.207911 #5865]  INFO -- default-centos-64: Successfully installed thor-0.19.0
+I, [2015-04-04T17:12:51.304479 #5865]  INFO -- default-centos-64: Fetching: busser-0.7.0.gemFetching: busser-0.7.0.gem ( 31%)Fetching: busser-0.7.0.gem ( 35%)Fetching: busser-0.7.0.gem ( 64%)Fetching: busser-0.7.0.gem ( 69%)Fetching: busser-0.7.0.gem ( 97%)Fetching: busser-0.7.0.gem (100%)Fetching: busser-0.7.0.gem (100%)
+I, [2015-04-04T17:12:51.328709 #5865]  INFO -- default-centos-64: Successfully installed busser-0.7.0
+I, [2015-04-04T17:12:51.328769 #5865]  INFO -- default-centos-64: 2 gems installed
+I, [2015-04-04T17:12:51.491672 #5865]  INFO -- default-centos-64: -----> Setting up Busser
+I, [2015-04-04T17:12:51.491743 #5865]  INFO -- default-centos-64: Creating BUSSER_ROOT in /tmp/busser
+I, [2015-04-04T17:12:51.491800 #5865]  INFO -- default-centos-64: Creating busser binstub
+I, [2015-04-04T17:13:34.018005 #5865]  INFO -- default-centos-64: Plugin bats installed (version 0.3.0)
+I, [2015-04-04T17:13:34.022722 #5865]  INFO -- default-centos-64: -----> Running postinstall for bats plugin
+I, [2015-04-04T17:13:34.053200 #5865]  INFO -- default-centos-64: Installed Bats to /tmp/busser/vendor/bats/bin/bats
+I, [2015-04-04T17:13:58.396570 #5865]  INFO -- default-centos-64: Plugin serverspec installed (version 0.5.5)
+I, [2015-04-04T17:13:58.399981 #5865]  INFO -- default-centos-64: -----> Running postinstall for serverspec plugin
+I, [2015-04-04T17:14:21.843620 #5865]  INFO -- default-centos-64: Finished setting up <default-centos-64> (2m18.62s).
+I, [2015-04-04T17:14:21.843742 #5865]  INFO -- default-centos-64: -----> Verifying <default-centos-64>...
+I, [2015-04-04T17:14:22.287221 #5865]  INFO -- default-centos-64: Suite path directory /tmp/busser/suites does not exist, skipping.
+I, [2015-04-04T17:14:22.457245 #5865]  INFO -- default-centos-64: Uploading /tmp/busser/suites/bats/git.bats (mode=0664)
+I, [2015-04-04T17:14:22.950486 #5865]  INFO -- default-centos-64: Uploading /tmp/busser/suites/serverspec/spec_helper.rb (mode=0664)
+I, [2015-04-04T17:14:23.436128 #5865]  INFO -- default-centos-64: Uploading /tmp/busser/suites/serverspec/git_spec.rb (mode=0664)
+I, [2015-04-04T17:14:23.933527 #5865]  INFO -- default-centos-64: -----> Running bats test suite
+I, [2015-04-04T17:14:24.093178 #5865]  INFO -- default-centos-64: [1G   git is installed [K[77G1/2[2G[1G ✓ git is installed [K
+I, [2015-04-04T17:14:24.100489 #5865]  INFO -- default-centos-64: [1G ✓ git is installed in the correct place [K
+I, [2015-04-04T17:14:24.100537 #5865]  INFO -- default-centos-64: [0m
+I, [2015-04-04T17:14:24.100557 #5865]  INFO -- default-centos-64: 2 tests, 0 failures
+I, [2015-04-04T17:14:24.100610 #5865]  INFO -- default-centos-64: -----> Running serverspec test suite
+I, [2015-04-04T17:14:24.104198 #5865]  INFO -- default-centos-64: -----> Installing Serverspec..
+I, [2015-04-04T17:15:00.602559 #5865]  INFO -- default-centos-64: Fetching: net-ssh-2.9.2.gemFetching: net-ssh-2.9.2.gem (  5%)Fetching: net-ssh-2.9.2.gem (  9%)Fetching: net-ssh-2.9.2.gem ( 10%)Fetching: net-ssh-2.9.2.gem ( 14%)Fetching: net-ssh-2.9.2.gem ( 18%)Fetching: net-ssh-2.9.2.gem ( 19%)Fetching: net-ssh-2.9.2.gem ( 23%)Fetching: net-ssh-2.9.2.gem ( 24%)Fetching: net-ssh-2.9.2.gem ( 27%)Fetching: net-ssh-2.9.2.gem ( 28%)Fetching: net-ssh-2.9.2.gem ( 32%)Fetching: net-ssh-2.9.2.gem ( 33%)Fetching: net-ssh-2.9.2.gem ( 36%)Fetching: net-ssh-2.9.2.gem ( 37%)Fetching: net-ssh-2.9.2.gem ( 41%)Fetching: net-ssh-2.9.2.gem ( 42%)Fetching: net-ssh-2.9.2.gem ( 45%)Fetching: net-ssh-2.9.2.gem ( 47%)Fetching: net-ssh-2.9.2.gem ( 50%)Fetching: net-ssh-2.9.2.gem ( 51%)Fetching: net-ssh-2.9.2.gem ( 54%)Fetching: net-ssh-2.9.2.gem ( 56%)Fetching: net-ssh-2.9.2.gem ( 59%)Fetching: net-ssh-2.9.2.gem ( 60%)Fetching: net-ssh-2.9.2.gem ( 63%)Fetching: net-ssh-2.9.2.gem ( 65%)Fetching: net-ssh-2.9.2.gem ( 68%)Fetching: net-ssh-2.9.2.gem ( 70%)Fetching: net-ssh-2.9.2.gem ( 72%)Fetching: net-ssh-2.9.2.gem ( 74%)Fetching: net-ssh-2.9.2.gem ( 77%)Fetching: net-ssh-2.9.2.gem ( 79%)Fetching: net-ssh-2.9.2.gem ( 81%)Fetching: net-ssh-2.9.2.gem ( 83%)Fetching: net-ssh-2.9.2.gem ( 86%)Fetching: net-ssh-2.9.2.gem ( 88%)Fetching: net-ssh-2.9.2.gem ( 90%)Fetching: net-ssh-2.9.2.gem ( 93%)Fetching: net-ssh-2.9.2.gem ( 95%)Fetching: net-ssh-2.9.2.gem ( 97%)Fetching: net-ssh-2.9.2.gem ( 99%)Fetching: net-ssh-2.9.2.gem (100%)Fetching: net-ssh-2.9.2.gem (100%)
+I, [2015-04-04T17:15:23.528162 #5865]  INFO -- default-centos-64: Fetching: net-scp-1.2.1.gemFetching: net-scp-1.2.1.gem ( 23%)Fetching: net-scp-1.2.1.gem ( 25%)Fetching: net-scp-1.2.1.gem ( 47%)Fetching: net-scp-1.2.1.gem ( 50%)Fetching: net-scp-1.2.1.gem ( 72%)Fetching: net-scp-1.2.1.gem ( 75%)Fetching: net-scp-1.2.1.gem ( 96%)Fetching: net-scp-1.2.1.gem (100%)Fetching: net-scp-1.2.1.gem (100%)
+I, [2015-04-04T17:15:45.947343 #5865]  INFO -- default-centos-64: Fetching: specinfra-2.28.0.gemFetching: specinfra-2.28.0.gem ( 15%)Fetching: specinfra-2.28.0.gem ( 16%)Fetching: specinfra-2.28.0.gem ( 30%)Fetching: specinfra-2.28.0.gem ( 32%)Fetching: specinfra-2.28.0.gem ( 46%)Fetching: specinfra-2.28.0.gem ( 48%)Fetching: specinfra-2.28.0.gem ( 62%)Fetching: specinfra-2.28.0.gem ( 64%)Fetching: specinfra-2.28.0.gem ( 77%)Fetching: specinfra-2.28.0.gem ( 80%)Fetching: specinfra-2.28.0.gem ( 93%)Fetching: specinfra-2.28.0.gem ( 96%)Fetching: specinfra-2.28.0.gem (100%)Fetching: specinfra-2.28.0.gem (100%)
+I, [2015-04-04T17:16:08.513146 #5865]  INFO -- default-centos-64: Fetching: multi_json-1.11.0.gemFetching: multi_json-1.11.0.gem ( 30%)Fetching: multi_json-1.11.0.gem ( 34%)Fetching: multi_json-1.11.0.gem ( 63%)Fetching: multi_json-1.11.0.gem ( 67%)Fetching: multi_json-1.11.0.gem ( 95%)Fetching: multi_json-1.11.0.gem (100%)Fetching: multi_json-1.11.0.gem (100%)
+I, [2015-04-04T17:16:30.741202 #5865]  INFO -- default-centos-64: Fetching: diff-lcs-1.2.5.gemFetching: diff-lcs-1.2.5.gem ( 15%)Fetching: diff-lcs-1.2.5.gem ( 17%)Fetching: diff-lcs-1.2.5.gem ( 32%)Fetching: diff-lcs-1.2.5.gem ( 34%)Fetching: diff-lcs-1.2.5.gem ( 48%)Fetching: diff-lcs-1.2.5.gem ( 50%)Fetching: diff-lcs-1.2.5.gem ( 64%)Fetching: diff-lcs-1.2.5.gem ( 67%)Fetching: diff-lcs-1.2.5.gem ( 80%)Fetching: diff-lcs-1.2.5.gem ( 84%)Fetching: diff-lcs-1.2.5.gem ( 97%)Fetching: diff-lcs-1.2.5.gem (100%)Fetching: diff-lcs-1.2.5.gem (100%)
+I, [2015-04-04T17:16:55.522901 #5865]  INFO -- default-centos-64: Fetching: rspec-support-3.2.2.gemFetching: rspec-support-3.2.2.gem ( 63%)Fetching: rspec-support-3.2.2.gem (100%)Fetching: rspec-support-3.2.2.gem (100%)
+I, [2015-04-04T17:17:19.523397 #5865]  INFO -- default-centos-64: Fetching: rspec-expectations-3.2.0.gemFetching: rspec-expectations-3.2.0.gem ( 24%)Fetching: rspec-expectations-3.2.0.gem ( 48%)Fetching: rspec-expectations-3.2.0.gem ( 73%)Fetching: rspec-expectations-3.2.0.gem ( 97%)Fetching: rspec-expectations-3.2.0.gem (100%)Fetching: rspec-expectations-3.2.0.gem (100%)
+I, [2015-04-04T17:17:41.865334 #5865]  INFO -- default-centos-64: Fetching: rspec-core-3.2.2.gemFetching: rspec-core-3.2.2.gem (  6%)Fetching: rspec-core-3.2.2.gem (  7%)Fetching: rspec-core-3.2.2.gem ( 13%)Fetching: rspec-core-3.2.2.gem ( 14%)Fetching: rspec-core-3.2.2.gem ( 20%)Fetching: rspec-core-3.2.2.gem ( 21%)Fetching: rspec-core-3.2.2.gem ( 26%)Fetching: rspec-core-3.2.2.gem ( 27%)Fetching: rspec-core-3.2.2.gem ( 33%)Fetching: rspec-core-3.2.2.gem ( 34%)Fetching: rspec-core-3.2.2.gem ( 39%)Fetching: rspec-core-3.2.2.gem ( 41%)Fetching: rspec-core-3.2.2.gem ( 46%)Fetching: rspec-core-3.2.2.gem ( 48%)Fetching: rspec-core-3.2.2.gem ( 52%)Fetching: rspec-core-3.2.2.gem ( 54%)Fetching: rspec-core-3.2.2.gem ( 59%)Fetching: rspec-core-3.2.2.gem ( 61%)Fetching: rspec-core-3.2.2.gem ( 66%)Fetching: rspec-core-3.2.2.gem ( 68%)Fetching: rspec-core-3.2.2.gem ( 72%)Fetching: rspec-core-3.2.2.gem ( 74%)Fetching: rspec-core-3.2.2.gem ( 79%)Fetching: rspec-core-3.2.2.gem ( 81%)Fetching: rspec-core-3.2.2.gem ( 85%)Fetching: rspec-core-3.2.2.gem ( 88%)Fetching: rspec-core-3.2.2.gem ( 92%)Fetching: rspec-core-3.2.2.gem ( 95%)Fetching: rspec-core-3.2.2.gem ( 98%)Fetching: rspec-core-3.2.2.gem (100%)Fetching: rspec-core-3.2.2.gem (100%)
+I, [2015-04-04T17:18:05.032195 #5865]  INFO -- default-centos-64: Fetching: rspec-its-1.2.0.gemFetching: rspec-its-1.2.0.gem ( 57%)Fetching: rspec-its-1.2.0.gem ( 64%)Fetching: rspec-its-1.2.0.gem (100%)Fetching: rspec-its-1.2.0.gem (100%)
+I, [2015-04-04T17:18:27.377424 #5865]  INFO -- default-centos-64: Fetching: rspec-mocks-3.2.1.gemFetching: rspec-mocks-3.2.1.gem ( 11%)Fetching: rspec-mocks-3.2.1.gem ( 12%)Fetching: rspec-mocks-3.2.1.gem ( 22%)Fetching: rspec-mocks-3.2.1.gem ( 24%)Fetching: rspec-mocks-3.2.1.gem ( 33%)Fetching: rspec-mocks-3.2.1.gem ( 35%)Fetching: rspec-mocks-3.2.1.gem ( 44%)Fetching: rspec-mocks-3.2.1.gem ( 47%)Fetching: rspec-mocks-3.2.1.gem ( 56%)Fetching: rspec-mocks-3.2.1.gem ( 58%)Fetching: rspec-mocks-3.2.1.gem ( 67%)Fetching: rspec-mocks-3.2.1.gem ( 70%)Fetching: rspec-mocks-3.2.1.gem ( 78%)Fetching: rspec-mocks-3.2.1.gem ( 81%)Fetching: rspec-mocks-3.2.1.gem ( 89%)Fetching: rspec-mocks-3.2.1.gem ( 93%)Fetching: rspec-mocks-3.2.1.gem (100%)Fetching: rspec-mocks-3.2.1.gem (100%)
+I, [2015-04-04T17:18:50.915771 #5865]  INFO -- default-centos-64: Fetching: rspec-3.2.0.gemFetching: rspec-3.2.0.gem ( 72%)Fetching: rspec-3.2.0.gem ( 80%)Fetching: rspec-3.2.0.gem (100%)Fetching: rspec-3.2.0.gem (100%)
+I, [2015-04-04T17:19:02.024261 #5865]  INFO -- default-centos-64: Fetching: serverspec-2.14.0.gemFetching: serverspec-2.14.0.gem ( 22%)Fetching: serverspec-2.14.0.gem ( 25%)Fetching: serverspec-2.14.0.gem ( 46%)Fetching: serverspec-2.14.0.gem ( 50%)Fetching: serverspec-2.14.0.gem ( 70%)Fetching: serverspec-2.14.0.gem ( 74%)Fetching: serverspec-2.14.0.gem ( 95%)Fetching: serverspec-2.14.0.gem ( 99%)Fetching: serverspec-2.14.0.gem (100%)Fetching: serverspec-2.14.0.gem (100%)
+I, [2015-04-04T17:19:02.074943 #5865]  INFO -- default-centos-64: -----> serverspec installed (version 2.14.0)
+I, [2015-04-04T17:19:02.134029 #5865]  INFO -- default-centos-64: /opt/chef/embedded/bin/ruby -I/tmp/busser/suites/serverspec -I/tmp/busser/gems/gems/rspec-support-3.2.2/lib:/tmp/busser/gems/gems/rspec-core-3.2.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/busser/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/busser/suites/serverspec
+I, [2015-04-04T17:19:02.392697 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:19:02.392781 #5865]  INFO -- default-centos-64: Command "git --version"
+I, [2015-04-04T17:19:02.392819 #5865]  INFO -- default-centos-64:   exit_status
+I, [2015-04-04T17:19:02.417060 #5865]  INFO -- default-centos-64: [32m    should eq 0[0m
+I, [2015-04-04T17:19:02.417121 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:19:02.417143 #5865]  INFO -- default-centos-64: File "/usr/share/git-core"
+I, [2015-04-04T17:19:02.432105 #5865]  INFO -- default-centos-64: [32m  should be directory[0m
+I, [2015-04-04T17:19:02.432193 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:19:02.432240 #5865]  INFO -- default-centos-64: Finished in 0.03895 seconds (files took 0.22868 seconds to load)
+I, [2015-04-04T17:19:02.432292 #5865]  INFO -- default-centos-64: [32m2 examples, 0 failures[0m
+I, [2015-04-04T17:19:02.432330 #5865]  INFO -- default-centos-64: 
+I, [2015-04-04T17:19:02.467038 #5865]  INFO -- default-centos-64: Finished verifying <default-centos-64> (4m40.62s).
+I, [2015-04-04T17:34:46.859621 #12141]  INFO -- default-centos-64: -----> Verifying <default-centos-64>...
+I, [2015-04-04T17:34:47.261909 #12141]  INFO -- default-centos-64: Removing /tmp/busser/suites/bats
+I, [2015-04-04T17:34:47.262640 #12141]  INFO -- default-centos-64: Removing /tmp/busser/suites/serverspec
+I, [2015-04-04T17:34:47.431222 #12141]  INFO -- default-centos-64: Uploading /tmp/busser/suites/bats/git.bats (mode=0664)
+I, [2015-04-04T17:34:47.912251 #12141]  INFO -- default-centos-64: Uploading /tmp/busser/suites/serverspec/spec_helper.rb (mode=0664)
+I, [2015-04-04T17:34:48.383974 #12141]  INFO -- default-centos-64: Uploading /tmp/busser/suites/serverspec/git_spec.rb (mode=0664)
+I, [2015-04-04T17:34:48.843679 #12141]  INFO -- default-centos-64: Uploading /tmp/busser/suites/serverspec/git_spec.rb~ (mode=0664)
+I, [2015-04-04T17:34:49.350259 #12141]  INFO -- default-centos-64: -----> Running bats test suite
+I, [2015-04-04T17:34:49.393196 #12141]  INFO -- default-centos-64: [1G   git is installed [K[77G1/2[2G[1G ✓ git is installed [K
+I, [2015-04-04T17:34:49.402643 #12141]  INFO -- default-centos-64: [1G ✓ git is installed in the correct place [K
+I, [2015-04-04T17:34:49.402714 #12141]  INFO -- default-centos-64: [0m
+I, [2015-04-04T17:34:49.402750 #12141]  INFO -- default-centos-64: 2 tests, 0 failures
+I, [2015-04-04T17:34:49.402831 #12141]  INFO -- default-centos-64: -----> Running serverspec test suite
+I, [2015-04-04T17:34:49.464175 #12141]  INFO -- default-centos-64: /opt/chef/embedded/bin/ruby -I/tmp/busser/suites/serverspec -I/tmp/busser/gems/gems/rspec-support-3.2.2/lib:/tmp/busser/gems/gems/rspec-core-3.2.2/lib /opt/chef/embedded/bin/rspec --pattern /tmp/busser/suites/serverspec/\*\*/\*_spec.rb --color --format documentation --default-path /tmp/busser/suites/serverspec
+I, [2015-04-04T17:34:49.725102 #12141]  INFO -- default-centos-64: 
+I, [2015-04-04T17:34:49.725180 #12141]  INFO -- default-centos-64: git
+I, [2015-04-04T17:34:49.725662 #12141]  INFO -- default-centos-64:   is installed
+I, [2015-04-04T17:34:49.725724 #12141]  INFO -- default-centos-64:     File "/usr/share/git-core"
+I, [2015-04-04T17:34:49.754709 #12141]  INFO -- default-centos-64: [32m      should be directory[0m
+I, [2015-04-04T17:34:49.754790 #12141]  INFO -- default-centos-64:   is running
+I, [2015-04-04T17:34:49.754828 #12141]  INFO -- default-centos-64:     Command "git --version"
+I, [2015-04-04T17:34:49.754858 #12141]  INFO -- default-centos-64:       exit_status
+I, [2015-04-04T17:34:49.759612 #12141]  INFO -- default-centos-64: [32m        should eq 0[0m
+I, [2015-04-04T17:34:49.759667 #12141]  INFO -- default-centos-64: 
+I, [2015-04-04T17:34:49.759698 #12141]  INFO -- default-centos-64: Finished in 0.03388 seconds (files took 0.23278 seconds to load)
+I, [2015-04-04T17:34:49.759727 #12141]  INFO -- default-centos-64: [32m2 examples, 0 failures[0m
+I, [2015-04-04T17:34:49.759753 #12141]  INFO -- default-centos-64: 
+I, [2015-04-04T17:34:49.786647 #12141]  INFO -- default-centos-64: Finished verifying <default-centos-64> (0m2.92s).
+I, [2015-04-04T17:39:20.631974 #14012]  INFO -- default-centos-64: -----> Destroying <default-centos-64>...
+I, [2015-04-04T17:39:20.637290 #14012]  INFO -- default-centos-64: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/mixlib-shellout-2.0.1/lib/mixlib/shellout/unix.rb:305: warning: Insecure world writable dir /home/john/apps in PATH, mode 040777
+I, [2015-04-04T17:39:20.768335 #14012]  INFO -- default-centos-64: /opt/vagrant/bin/../embedded/gems/gems/vagrant-1.6.3/lib/vagrant/pre-rubygems.rb:31: warning: Insecure world writable dir /home/john/apps in PATH, mode 040777
+I, [2015-04-04T17:39:21.145434 #14012]  INFO -- default-centos-64: /opt/vagrant/embedded/gems/gems/bundler-1.6.2/lib/bundler/runtime.rb:222: warning: Insecure world writable dir /home/john/apps in PATH, mode 040777
+I, [2015-04-04T17:39:23.460613 #14012]  INFO -- default-centos-64: ==> default: Forcing shutdown of VM...
+I, [2015-04-04T17:39:24.963046 #14012]  INFO -- default-centos-64: ==> default: Destroying VM and associated drives...
+I, [2015-04-04T17:39:25.570517 #14012]  INFO -- default-centos-64: ==> default: Removing hosts
+I, [2015-04-04T17:39:25.617774 #14012]  INFO -- default-centos-64: Vagrant instance <default-centos-64> destroyed.
+I, [2015-04-04T17:39:25.618788 #14012]  INFO -- default-centos-64: Finished destroying <default-centos-64> (0m4.99s).

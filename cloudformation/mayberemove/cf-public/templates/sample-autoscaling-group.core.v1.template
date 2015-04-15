@@ -1,0 +1,118 @@
+{
+	"AWSTemplateFormatVersion" : "2010-09-09",
+
+	"Description" : "Simple autoscale group, !!! Add ELB !!! multi AZ",
+
+	"Parameters" : {
+
+		"Owner": {
+			"Description" : "Resources Owner",
+			"Type": "String",
+			"Default" : "bt"
+		},
+
+		"Project": {
+			"Description" : "Project Name",
+			"Type": "String"
+		},
+
+		"Environment": {
+			"Description" : "Working Environment - prod, test, devel",
+			"Type": "String",
+			"AllowedValues" : [ "test", "devel" ]
+		},
+
+		"VpcCidrBlock": {
+			"Description" : "First two octets in the form x.y to use for the CIDR address range of this VPC",
+			"Type": "String",
+			"Default" : "10.210"
+		},
+
+		"Vpc" : { 
+			"Type": "String",
+			"Description" : "Existing VPC Id in which to create resources",
+			"Default" : "vpc-3c9c5159"
+		},
+
+		"ImageId": {
+			"Description" : "Existing AMI image",
+			"Type": "String"
+		},
+
+		"KeyName": {
+			"Description" : "Existing EC2 KeyPair for instances",
+			"Type": "AWS::EC2::KeyPair::KeyName",
+			"ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
+		}
+	},
+
+	"Mappings" : {
+		"EnvSubnetMap" : {
+			"devel" : { 
+				"PrivateC" : "subnet-3e5f9949",
+				"PrivateD" : "subnet-2dcf1748",
+				"PrivateE" : "subnet-5317d624",
+				"PrivateF" : "subnet-b88853dd"
+			},
+			"test" : { 
+				"PrivateC" : "subnet-5067a527",
+				"PrivateD" : "subnet-b18420d4",
+				"PrivateE" : "subnet-5f67a528",
+				"PrivateF" : "subnet-b08420d5"
+			}
+		}
+	},
+
+
+	"Resources": {
+
+		"ServerSecurityGroup" : {
+			"Type" : "AWS::EC2::SecurityGroup",
+			"Properties" : {
+				"GroupDescription" : "Enable HTTPS access via port 443 locked down to the load balancer + SSH access",
+				"VpcId" : { "Ref" : "Vpc" },
+				"SecurityGroupIngress" : [
+					{"IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "203.24.1.0/24"},
+					{"IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "172.16.0.0/12"}
+				]
+			}
+		},
+	
+		"ServerASGroup" : {
+			"Type" : "AWS::AutoScaling::AutoScalingGroup",
+			"Properties" : {
+				"AvailabilityZones" : { "Fn::GetAZs" : "" },
+				"LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
+				"MinSize" : "1",
+				"MaxSize" : "2",
+				"VPCZoneIdentifier" : [ 
+					{ "Fn::FindInMap" : [ "EnvSubnetMap", { "Ref" : "Environment" }, "PrivateC" ] },
+					{ "Fn::FindInMap" : [ "EnvSubnetMap", { "Ref" : "Environment" }, "PrivateD" ] }
+				],
+				"Tags": [
+					{ "Key": "Name", "Value": {	"Fn::Join" : [ "-", [ "my-servers", { "Ref" : "Owner"},
+						{ "Ref": "Project" }, { "Ref": "Environment" } ]]}},
+					{ "Key": "Owner", "Value": { "Ref" : "Owner" } },
+					{ "Key": "Project", "Value": { "Ref" : "Project" } },
+					{ "Key": "Environment", "Value": { "Ref" : "Environment" } }
+				],
+			}		
+		},
+
+		"LaunchConfig" : {
+			"Type" : "AWS::AutoScaling::LaunchConfiguration",
+			"Properties" : {
+				"KeyName" : { "Ref" : "KeyName" },
+				"ImageId" : { "Ref" : "ImageId" },
+				"SecurityGroups" : [ { "Ref" : "ServerSecurityGroup" } ],
+				"InstanceType" : { "Ref" : "InstanceType" },
+				"UserData" : { "Fn::Base64" : { "Fn::Join" : [ "", [
+					"#!/bin/bash\n",
+					"# curl -k https://172.25.10.105:8140/packages/current/install.bash | bash\n"
+				]]}}
+			}
+		}
+	}
+}
+
+

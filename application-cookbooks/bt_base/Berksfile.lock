@@ -1,0 +1,38 @@
+DEPENDENCIES
+  bt_base
+    path: .
+    metadata: true
+  bt_java
+    path: ../bt_java
+  bt_ssh
+    path: ../bt_ssh
+
+GRAPH
+  bt_base (0.1.0)
+    bt_java (>= 0.1.0)
+    bt_ssh (>= 0.1.0)
+    git (>= 0.0.0)
+    yum (>= 3.0.0)
+  bt_java (0.1.0)
+    java (>= 1.31.0)
+  bt_ssh (0.1.0)
+  build-essential (2.2.2)
+  chef_handler (1.1.6)
+  dmg (2.2.2)
+  git (4.1.0)
+    build-essential (>= 0.0.0)
+    dmg (>= 0.0.0)
+    runit (>= 1.0)
+    windows (>= 0.0.0)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)
+  java (1.31.0)
+  runit (1.5.18)
+    build-essential (>= 0.0.0)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)
+  windows (1.36.6)
+    chef_handler (>= 0.0.0)
+  yum (3.5.3)
+  yum-epel (0.6.0)
+    yum (~> 3.0)

@@ -1,0 +1,114 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"AWS CloudFormation Template Manufactoring Build: Create Gitlab",
+  "Parameters":{  
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName"
+    },
+    "InstanceType" : {
+      "Type" : "String"
+    },
+    "HostedZone" : {
+      "Type" : "String"
+    },
+    "DnsPrefix" : {
+      "Type" : "String"
+    },
+    "AMI":{  
+      "Type":"String"
+    },
+    "SSHLocation":{  
+      "Type":"String"
+    }
+  },
+  "Resources":{  
+    "EC2Instance":{  
+      "Type":"AWS::EC2::Instance",
+      "Properties":{  
+        "ImageId":{  
+          "Ref":"AMI"
+        },
+        "InstanceType":{  
+          "Ref":"InstanceType"
+        },
+        "KeyName":{  
+          "Ref":"KeyName"
+        },
+        "SecurityGroups":[  
+          {  
+            "Ref":"InstanceSecurityGroup"
+          }
+        ]
+      }
+    },
+
+    "GitDNSRecord" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" : {
+        "HostedZoneName" : { "Fn::Join" : [ "", [{"Ref" : "HostedZone"}, "." ]]},
+        "Name" : { "Fn::Join" : [ "", [{"Ref" : "DnsPrefix"}, ".", {"Ref" : "HostedZone"} ,"."]]},
+        "Type" : "A",
+        "TTL" : "60",
+        "ResourceRecords" : [ { "Fn::GetAtt" : [ "EC2Instance", "PublicIp" ] } ]
+      }
+    },
+
+    "InstanceSecurityGroup":{  
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{  
+        "GroupDescription":"Enable SSH access",
+        "SecurityGroupIngress" : [ 
+        {
+          "CidrIp" : { "Ref" : "SSHLocation"},
+          "IpProtocol" : "tcp",
+          "FromPort" : "80",
+          "ToPort" : "80"
+        },{
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        } ]
+      }
+    }
+  },
+  "Outputs":{  
+    "AZ":{  
+      "Description":"Availability Zone of the newly created EC2 instance",
+      "Value":{  
+        "Fn::GetAtt":[  
+          "EC2Instance",
+          "AvailabilityZone"
+        ]
+      }
+    },
+    "PublicDNS":{  
+      "Description":"Public DNSName of the newly created EC2 instance",
+      "Value":{  
+        "Fn::GetAtt":[  
+          "EC2Instance",
+          "PublicDnsName"
+        ]
+      }
+    },
+    "PublicIP":{  
+      "Description":"Public IP address of the newly created EC2 instance",
+      "Value":{  
+        "Fn::GetAtt":[  
+          "EC2Instance",
+          "PublicIp"
+        ]
+      }
+    },
+    "R53DNS":{  
+      "Description":"The Route53 DNS of the newly created EC2 instance",
+      "Value":{  
+        "Ref":"GitDNSRecord"  
+      }
+    },
+    "SecurityGroupId" : {
+      "Value" : { "Ref" : "InstanceSecurityGroup" },
+      "Description" : "Security Group of instance"
+    }
+  }
+}

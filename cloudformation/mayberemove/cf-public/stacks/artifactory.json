@@ -1,0 +1,131 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"AWS CloudFormation Template Manufactoring Tools: Create Artifactory",
+  "Parameters":{ 
+    "Owner": {
+      "Type": "String",
+      "Default" : "bt"
+    },
+    "Project": {
+      "Default" : "panorama",
+      "Type": "String"
+    },
+    "Environment": {
+      "Type": "String",
+      "Default" : "devel"
+    }, 
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName"
+    },
+    "InstanceType" : {
+      "Type" : "String"
+    },
+    "HostedZone" : {
+      "Type" : "String"
+    },
+    "DnsPrefix" : {
+      "Type" : "String"
+    },
+    "AMI":{  
+      "Type":"String"
+    },
+    "SSHLocation":{  
+      "Type":"String"
+    }
+  },
+  "Resources":{  
+    "Instance":{  
+      "Type":"AWS::EC2::Instance",
+      "Properties":{  
+        "ImageId":{  
+          "Ref":"AMI"
+        },
+        "InstanceType":{  
+          "Ref":"InstanceType"
+        },
+        "KeyName":{  
+          "Ref":"KeyName"
+        },
+        "SecurityGroups":[  
+          {  
+            "Ref":"InstanceSecurityGroup"
+          }
+        ],
+	"Tags": [
+ 	  { "Key": "Name", "Value": {	"Fn::Join" : [ "-", [ "Artifactory", { "Ref" : "Owner"},
+	  { "Ref": "Project" }, { "Ref": "Environment" } ]]}},
+	  { "Key": "Owner", "Value": { "Ref" : "Owner" } },
+	  { "Key": "Project", "Value": { "Ref" : "Project" } },
+	  { "Key": "Environment", "Value": { "Ref" : "Environment" } }
+	]
+      }
+    },
+    "InstanceSecurityGroup":{  
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{  
+        "GroupDescription":"Enable HTTP and SSH access",
+        "SecurityGroupIngress":[  
+          {  
+            "CidrIp":{ "Ref":"SSHLocation" },
+            "IpProtocol":"tcp",
+            "FromPort":"8081",
+            "ToPort":"8081"
+          },
+
+          {  
+            "CidrIp":{ "Ref":"SSHLocation" },
+            "FromPort":"22",
+            "IpProtocol":"tcp",
+            "ToPort":"22"
+          }
+        ]
+      }
+    },
+    "InstanceDNSRecord" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" : {
+        "HostedZoneName" : { "Fn::Join" : [ "", [{"Ref" : "HostedZone"}, "." ]]},
+        "Name" : { "Fn::Join" : [ "", [{"Ref" : "DnsPrefix"}, ".", {"Ref" : "HostedZone"} ,"."]]},
+        "Type" : "A",
+        "TTL" : "60",
+        "ResourceRecords" : [ { "Fn::GetAtt" : [ "Instance", "PublicIp" ] } ]
+      }
+    }
+  },
+  "Outputs":{  
+    "AZ":{  
+      "Description":"Availability Zone of the newly created EC2 instance",
+      "Value":{ "Fn::GetAtt":[ "Instance", "AvailabilityZone" ] }
+    },
+    "PublicDNS":{  
+      "Description":"Public DNSName of the newly created EC2 instance",
+      "Value":{ "Fn::GetAtt":[ "Instance", "PublicDnsName" ] }
+    },
+    "PrivateDNS":{  
+      "Description":"Private DNSName address of the newly created EC2 instance",
+      "Value":{ "Fn::GetAtt":[ "Instance", "PrivateDnsName" ]}
+    },
+    "R53DNS":{  
+      "Description":"The Route53 DNS of the newly created EC2 instance",
+      "Value":{"Ref":"InstanceDNSRecord"}
+    },
+    "SecurityGroupId" : {
+      "Value" : { "Ref" : "InstanceSecurityGroup" }, "Description" : "Security Group of instance"
+    },
+    "URL":{  
+      "Description":"URL for newly created Artifactory Instance",
+      "Value":{  
+        "Fn::Join":[  
+          "",
+          [  
+            "http://",
+            {  
+              "Ref":"InstanceDNSRecord"
+            },
+            ":8081/artifactory"
+          ]
+        ]
+      }
+    }
+  }
+}

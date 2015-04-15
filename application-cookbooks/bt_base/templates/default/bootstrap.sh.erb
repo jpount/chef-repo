@@ -1,0 +1,281 @@
+#!/bin/bash -e
+#
+# This script will bootstrap and run chef
+#
+# You need to specify a role, origin, git_key, branch name, and data
+# bag secret info below
+#
+# Martin Rhoads
+#
+# sudo ./bootstrap.sh git_server production master https://github.com/jpount/chef-repo.git 
+#
+
+(
+echo 'Acquiring converge lock...'
+/usr/bin/flock -e 200
+echo 'Lock acquired!'
+
+set -o pipefail
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# ensure we were called by root
+if [ $UID != 0 ]; then
+  echo "this script needs to be run as root. exiting..."
+  exit 1
+fi
+
+# redirect stdout to /var/log/init
+#exec >> /var/log/init
+
+# redirect stderr to /var/log/init.err
+#exec 2>> /var/log/init.err
+
+##
+## settings
+##
+
+usage ()
+{
+  echo 'Usage : ./bootstrap.sh -r <role> -e <env> -b <git-branch> [-j <custom-json-url> -g <git-repo>]'
+  exit
+}
+
+while getopts r:e:b:g:j: opts; do
+   case ${opts} in
+      r) role=${OPTARG} ;;
+      e) environment=${OPTARG} ;;
+      b) branch=${OPTARG} ;;
+      g) origin=${OPTARG} ;;
+      j) custom_json=${OPTARG} ;;
+   esac
+done
+
+# extra validation
+if [ "$role" = "" ] || [ "$environment" = "" ] || [ "$branch" = "" ]
+then
+    usage
+fi
+if [ "$origin" = "" ]
+then
+    origin=https://github.com/jpount/chef-repo.git
+fi
+
+echo "Using.... Role=$role,Env=$environment,Branch=$branch,Git-Repo=$origin,CustomJsonFile=$custom_json"
+
+chef_dir=<%= node[:bt_base][:chef][:dir] %>
+converge=<%= node[:bt_base][:converge][:dir] %>
+git_key='<%= node[:bt_base][:git][:key] %>'
+data_bag_secret='<%= node[:bt_base][:chef][:data_bag_secret] %>'
+chef_version='<%= node[:bt_base][:chef][:version] %>'
+
+##
+## common function
+##
+
+update() {
+  echo 'update'
+<% if node[:bt_base][:ubuntu] %>
+  echo updating apt repo
+  apt-get update 1>&2
+<% else %>
+  echo no need to update yum
+<% end %>
+}
+
+
+install() {
+  echo 'install'
+  <% if node[:bt_base][:ubuntu] %>
+  if ! (dpkg -l | awk '{print $2}' | grep -q ^$1$ ) ; then
+    echo installing $1...
+    export DEBIAN_FRONTEND=noninteractive
+    echo 'installing with apt-get'
+    apt-get update 1>&2
+  fi
+  <% else %>
+  echo 'installing with yum'
+  yum install -y $1 1>&2
+  <% end %>
+
+}
+
+install_chef() {
+  echo 'install_chef'
+  # check to see if chef is already installed
+  if ! which chef-solo > /dev/null ; then
+    platform=`lsb_release -s -i | tr '[:upper:]' '[:lower:]'`
+    platform_version=`lsb_release -s -r`
+    arch=`uname -m`
+    package_local="/tmp/chef_${chef_version}.deb"
+    package_url="<%= node[:bt_base][:chef][:package_source] %>"
+    echo "Downloading chef from $package_url"
+    wget $package_url -O $package_local --progress=dot:mega
+    echo "Installing chef $chef_version"
+    dpkg -i $package_local
+    rm $package_local
+  else
+    echo chef is already installed
+  fi
+}
+
+create_ohai_hint() {
+  echo 'create_ohai_hint'
+  ohai_hints_dir="${chef_dir}/ohai/hints"
+  mkdir -p $ohai_hints_dir
+  touch "${ohai_hints_dir}/ec2.json"
+}
+
+update_repo() {
+  echo 'update_repo'
+  echo -e "$git_key" > $keyfile
+  chmod 0400 $keyfile
+
+  echo "ssh -i $keyfile -o StrictHostKeyChecking=no \$1 \$2" > $git_wrapper
+  chmod 0500 $git_wrapper
+
+  mkdir -p $(dirname $repo_dir)
+  if [ ! -d $repo_dir ]; then
+    echo "downloading cookbook repo..."
+    GIT_SSH=$git_wrapper git clone --branch $branch --depth 1 $origin $repo_dir
+  else
+    echo "cookbook repo already exists"
+  fi
+
+  echo "done updating code"
+}
+
+configure_chef() {
+  echo "configure_chef"
+  echo "saving current origin ($origin), branch ($branch), role ($role), and environment ($environment)"
+  echo "$origin" > $originfile
+  chmod 644 $originfile
+
+  echo "$branch" > $branchfile
+  chmod 644 $branchfile
+
+  echo "$role" > $rolefile
+  chmod 644 $rolefile
+
+  echo "$environment" > $envfile
+  chmod 644 $envfile
+
+  echo "configuring chef solo..."
+  cat<<EOF > ${chef_dir}/solo.rb
+repo_dir =    "${repo_dir}"
+cookbook_path "#{repo_dir}/cookbooks"
+role_path     "#{repo_dir}/roles"
+data_bag_path "#{repo_dir}/data_bags"
+ssl_verify_mode :verify_peer
+
+log_level        :info
+log_location     STDOUT
+EOF
+
+  encrypted_data_bag_secret_file=${chef_dir}/encrypted_data_bag_secret
+  echo -e "$data_bag_secret" > $encrypted_data_bag_secret_file
+  chmod 0400 $encrypted_data_bag_secret_file
+
+  echo "chef configured"
+}
+
+
+configure_converger() {
+  echo "configure_converger"
+  cat<<EOF > $converge
+#!/bin/bash -eu
+
+repo="${repo_dir}"
+branch=\`cat ${branchfile}\`
+role=\`cat ${rolefile}\`
+env=\`cat ${envfile}\`
+
+cd \${repo}
+
+runlist="role[\${role}]"
+if [ -f "roles/\${env}.rb" ]
+then
+  runlist+=",role[\${env}]"
+fi
+
+echo doing a hard reset to origin/\${branch}
+GIT_SSH=${git_wrapper} git fetch
+git reset --hard origin/\${branch}
+git clean -fdx
+
+if [ "$custom_json" = "" ]
+then
+   echo "using standard json - no custom attributes supplied"
+   json="{\"role\": \"\${role}\", \"env\": \"\${env}\", \"branch\": \"\${branch}\"}"
+   json_file=\'tempfile\'
+   echo \$json > \$json_file
+else
+   echo "using custom json from $custom_json"
+   json_file="/tmp/custom_json.json"
+   echo "Downloading custom json from $custom_json"
+   wget $custom_json -O /tmp/custom_json.json
+fi
+trap "{ rm -f '\$json_file' ; }" EXIT
+
+echo "running chef-solo with runlist \$runlist and json (in file \$json_file)"
+chef-solo -o "\${runlist}" -j \${json_file} "\$@"
+EOF
+  chmod 544 $converge
+}
+
+configure_chef_daemon() {
+  echo "configure_chef_daemon"
+  cat<<EOF > /etc/init/chef-solo.conf
+description     "chef-solo"
+author          "Martin Rhoads"
+start on networking
+script
+chef-solo --interval 600 --splay 600  | logger -t chef-solo 2>&1
+end script
+respawn
+EOF
+}
+
+run_chef() {
+  echo "doing initial chef run..."
+  $converge 1>&2
+  echo "initial chef run complete"
+}
+
+start_chef_daemon() {
+  start chef-solo
+}
+
+##
+## main
+##
+
+#some derived vars
+repo_dir=${chef_dir}/src
+keyfile=${chef_dir}/git_key
+envfile=${chef_dir}/environment
+rolefile=${chef_dir}/role
+branchfile=${chef_dir}/branch
+originfile=${chef_dir}/origin
+git_wrapper=${chef_dir}/git_wrapper
+
+echo "starting chef bootstrapping..."
+mkdir -p ${chef_dir}
+update
+install curl
+install git
+install_chef
+create_ohai_hint
+update_repo
+configure_chef
+configure_converger
+run_chef
+
+configure_chef_daemon
+# start_chef_daemon
+
+##
+## exit
+##
+
+echo "<%= node[:bt_base][:last_bootstrap_line] %>"
+) 200> /var/run/converge.lock

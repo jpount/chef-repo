@@ -1,0 +1,206 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"AWS CloudFormation Template Manufactoring Tools: Create Go Agents ASG",
+  "Parameters":{  
+    "VPCId" : {
+      "Type" : "String"
+    },
+    "SubnetId" : {
+      "Type" : "CommaDelimitedList"
+    },
+    "AZs" : {
+	"Type" : "CommaDelimitedList",
+    },
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName"
+    },
+    "InstanceType" : {
+      "Type" : "String"
+    },
+    "AMI":{  
+      "Type":"String"
+    },
+    "MaxInstances":{  
+      "Type":"String"
+    },
+    "SSHLocation":{  
+      "Type":"String"
+    }
+  },
+  "Resources":{  
+    "GoAgentGroup":{ 
+      "Type":"AWS::AutoScaling::AutoScalingGroup",
+      "Properties":{ 
+        "AvailabilityZones":{ "Ref" : "AZs" },
+        "VPCZoneIdentifier" : { "Ref" : "SubnetId" },
+        "LaunchConfigurationName":{ "Ref":"LaunchConfig" },
+        "MinSize":"2",
+        "MaxSize":{ "Ref":"MaxInstances" },
+        "DesiredCapacity":"2"
+     },
+      "CreationPolicy":{ 
+        "ResourceSignal":{ 
+          "Timeout":"PT30M",
+          "Count"   : "1"
+        }
+      },
+      "UpdatePolicy":{ 
+        "AutoScalingRollingUpdate":{ 
+          "MinInstancesInService":"1",
+          "MaxBatchSize":"1",
+          "PauseTime":"PT30M",
+          "WaitOnResourceSignals":"true"
+        }
+      }
+    },
+    "LaunchConfig" : {
+      "Type" : "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata" : {
+        "Comment" : "Launch Go Agents ASG",
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+            "packages" : {
+            },
+            "files" : {
+              "/etc/cfn/cfn-hup.conf" : {
+                "content" : { "Fn::Join" : ["", [
+                  "[main]\n",
+                  "stack=", { "Ref" : "AWS::StackId" }, "\n",
+                  "region=", { "Ref" : "AWS::Region" }, "\n"
+                ]]},
+                "mode"    : "000400",
+                "owner"   : "root",
+                "group"   : "root"
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
+                "content": { "Fn::Join" : ["", [
+                  "[cfn-auto-reloader-hook]\n",
+                  "triggers=post.update\n",
+                  "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                  "action=/opt/aws/bin/cfn-init -v ",
+                  "         --stack ", { "Ref" : "AWS::StackName" },
+                  "         --resource LaunchConfig ",
+                  "         --region ", { "Ref" : "AWS::Region" }, "\n",
+                  "runas=root\n"
+                ]]}
+              }
+            },
+            "services" : {
+              "sysvinit" : {
+                "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
+                              "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
+              }
+            }
+          }
+        }
+      },
+      "Properties" : {
+        "KeyName" : { "Ref" : "KeyName" },
+        "ImageId" : { "Ref" : "AMI" },
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash -xe\n",
+          "yum update -y aws-cfn-bootstrap\n",
+          "/opt/aws/bin/cfn-init -v ",
+          "         --stack ", { "Ref" : "AWS::StackId" },
+          "         --resource LaunchConfig ",
+          "         --region ", { "Ref" : "AWS::Region" }, "\n",
+          "/opt/aws/bin/cfn-signal -e $? ",
+          "         --stack ", { "Ref" : "AWS::StackId" },
+          "         --resource GoAgentGroup ",
+          "         --region ", { "Ref" : "AWS::Region" }, "\n"
+        ]]}}
+      }
+    },
+    "WebServerScaleUpPolicy" : {
+      "Type" : "AWS::AutoScaling::ScalingPolicy",
+      "Properties" : {
+        "AdjustmentType" : "ChangeInCapacity",
+        "AutoScalingGroupName" : { "Ref" : "GoAgentGroup" },
+        "Cooldown" : "60",
+        "ScalingAdjustment" : "1"
+      }
+    },
+    "WebServerScaleDownPolicy" : {
+      "Type" : "AWS::AutoScaling::ScalingPolicy",
+      "Properties" : {
+        "AdjustmentType" : "ChangeInCapacity",
+        "AutoScalingGroupName" : { "Ref" : "GoAgentGroup" },
+        "Cooldown" : "60",
+        "ScalingAdjustment" : "-1"
+      }
+    },
+    "CPUAlarmHigh": {
+     "Type": "AWS::CloudWatch::Alarm",
+     "Properties": {
+        "AlarmDescription": "Scale-up if CPU > 75% for 5 minutes",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Average",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "75",
+        "AlarmActions": [ { "Ref": "WebServerScaleUpPolicy" } ],
+        "Dimensions": [
+          {
+            "Name": "AutoScalingGroupName",
+            "Value": { "Ref": "GoAgentGroup" }
+          }
+        ],
+        "ComparisonOperator": "GreaterThanThreshold"
+      }
+    },
+    "CPUAlarmLow": {
+     "Type": "AWS::CloudWatch::Alarm",
+     "Properties": {
+        "AlarmDescription": "Scale-down if CPU < 60% for 10 minutes",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Average",
+        "Period": "300",
+        "EvaluationPeriods": "2",
+        "Threshold": "60",
+        "AlarmActions": [ { "Ref": "WebServerScaleDownPolicy" } ],
+        "Dimensions": [
+          {
+            "Name": "AutoScalingGroupName",
+            "Value": { "Ref": "GoAgentGroup" }
+          }
+        ],
+        "ComparisonOperator": "LessThanThreshold"
+      }
+    },
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "VpcId": {
+          "Ref": "VPCId"
+        },
+        "GroupDescription" : "Enable SSH access and HTTP access on the inbound ports",
+        "SecurityGroupIngress" : [ 
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : "8153",
+          "ToPort" : "8153",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },{
+          "IpProtocol" : "tcp",
+          "FromPort" : "8154",
+          "ToPort" : "8154",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },{
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        } ]
+      }
+    }
+  },
+  "Outputs" : {
+    "Message" : {
+      "Value" :  "Done"
+    }
+  }
+}

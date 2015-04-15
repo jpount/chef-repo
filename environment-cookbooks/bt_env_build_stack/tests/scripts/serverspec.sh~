@@ -1,0 +1,8 @@
+#!/bin/bash
+# serverspec.sh - RSpec tests for servers
+echo "Installing serverspec"
+sudo gem install serverspec
+cd /tmp/tests
+echo "Running integration tests for ami"
+#/opt/sensu/embedded/bin/rake spec
+rake spec

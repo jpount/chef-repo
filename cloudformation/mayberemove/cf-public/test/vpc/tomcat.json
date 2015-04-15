@@ -1,0 +1,160 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"AWS CloudFormation Template Manufactoring Tools: Create Tomcat UI",
+  "Parameters":{  
+    "Owner": {
+      "Type": "String",
+      "Default" : "bt"
+    },
+    "Project": {
+      "Default" : "panorama",
+      "Type": "String"
+    },
+    "Environment": {
+      "Type": "String",
+      "Default" : "devel"
+    },
+    "VPCId":{  
+      "Type":"String",
+      "Default" : "vpc-699a540c"
+    },
+    "SubnetId":{  
+      "Type":"String",
+      "Default" : "subnet-81b713e4"
+    },
+    "HostedZone" : {
+      "Type" : "String"
+    },
+    "DnsPrefix" : {
+      "Type" : "String"
+    },    
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName"
+    },
+    "InstanceType" : {
+      "Type" : "String"
+    },
+    "AMI":{  
+      "Type":"String"
+    },
+    "ApplicationURL":{  
+      "Type":"String"
+    },
+    "ApplicationPropertiesURL":{  
+      "Type":"String"
+    },
+    "SSHLocation":{  
+      "Type":"String"
+    }
+  },
+  "Resources":{  
+    "Instance":{  
+      "Type":"AWS::EC2::Instance",
+      "Properties":{  
+        "ImageId":{  
+          "Ref":"AMI"
+        },
+        "InstanceType":{  
+          "Ref":"InstanceType"
+        },
+        "KeyName":{  
+          "Ref":"KeyName"
+        },
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "SecurityGroupIds":[  
+          {  
+            "Ref":"InstanceSecurityGroup"
+          }
+        ],
+	"Tags": [
+ 	  { "Key": "Name", "Value": {	"Fn::Join" : [ "-", [ "Tomcat", { "Ref" : "Owner"},
+	  { "Ref": "Project" }, { "Ref": "Environment" } ]]}},
+	  { "Key": "Owner", "Value": { "Ref" : "Owner" } },
+	  { "Key": "Project", "Value": { "Ref" : "Project" } },
+	  { "Key": "Environment", "Value": { "Ref" : "Environment" } }
+        ],
+        "UserData" : {
+           "Fn::Base64" : { "Fn::Join" : ["", [
+           "#!/bin/bash -ex\n",
+           "exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1 \n",
+           "echo deploy application\n",
+           "cd /etc/tomcat \n",
+           "./deploy_app.sh ", {"Ref": "ApplicationURL"}, " ", {"Ref": "ApplicationPropertiesURL"},  "\n",
+           "echo done\n"
+        ]]}
+        }
+      }
+    },
+
+    "DNSRecord" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" : {
+        "HostedZoneName" : { "Fn::Join" : [ "", [{"Ref" : "HostedZone"}, "." ]]},
+        "Name" : { "Fn::Join" : [ "", [{"Ref" : "DnsPrefix"}, ".", {"Ref" : "HostedZone"} ,"."]]},
+        "Type" : "A",
+        "TTL" : "60",
+        "ResourceRecords" : [ { "Fn::GetAtt" : [ "Instance", "PrivateIp" ] } ]
+      }
+    },
+
+    "InstanceSecurityGroup":{  
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{
+        "VpcId": {
+          "Ref": "VPCId"
+        },  
+        "GroupDescription":"Enable HTTP and SSH access",
+        "SecurityGroupIngress":[  
+          {  
+            "CidrIp":{ "Ref":"SSHLocation" },
+            "IpProtocol":"tcp",
+            "FromPort":"8080",
+            "ToPort":"8080"
+          },
+          {  
+            "CidrIp":{ "Ref":"SSHLocation" },
+            "FromPort":"22",
+            "IpProtocol":"tcp",
+            "ToPort":"22"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs":{  
+    "PrivateDNS":{  
+      "Description":"Private DNSName address of the newly created EC2 instance",
+      "Value":{ "Fn::GetAtt":[ "Instance", "PrivateDnsName" ]}
+    },
+    "R53DNS":{  
+      "Description":"The Route53 DNS of the newly created EC2 instance",
+      "Value":{  
+        "Ref":"DNSRecord"  
+      }
+    },    
+    "PrivateIP":{  
+      "Description":"Private IP address of the newly created EC2 instance",
+      "Value":{ "Fn::GetAtt":[ "Instance", "PrivateIp" ]}
+    },
+    "SecurityGroupId" : {
+      "Value" : { "Ref" : "InstanceSecurityGroup" }, "Description" : "Security Group of instance"
+    },
+    "URL":{  
+      "Description":"URL for newly created Artifactory Instance",
+      "Value":{  
+        "Fn::Join":[  
+          "",
+          [  
+            "http://",
+            {  
+              "Ref":"DNSRecord"
+            },
+            ":8080"
+          ]
+        ]
+      }
+    }
+  }
+}

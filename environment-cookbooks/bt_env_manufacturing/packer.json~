@@ -1,0 +1,44 @@
+{
+  "variables": {
+    "account_id": "",
+    "aws_access_key_id": "",
+    "aws_secret_key": "",
+    "aws_region": "ap-southeast-2",
+    "s3_bucket": "",
+    "x509_cert_path": "",
+    "x509_key_path": ""
+  },
+
+  "builders": [
+    { "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key_id`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "ap-southeast-2",
+      "source_ami": "ami-27c9b91d",
+      "ssh_timeout": "5m",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "gitlab_ebs_packer_{{timestamp}}",
+      "tags": {
+		"Name": "Remote Git",
+		"Release": "Dev",
+		"Cost Centre": "Pan Dev Ops"
+      }
+    }
+  ],
+
+  "provisioners" : [ 
+    { "type": "chef-solo",
+      "cookbook_paths": [ "./berks-cookbooks" ],
+      "run_list": [ "bt_env_gitlab::default" ]
+    },
+
+    { "type": "shell",
+        "script": "provision_ubuntu.sh",
+        "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+        "only": [ "amazon-ebs" ]
+    }
+
+  ]
+
+}

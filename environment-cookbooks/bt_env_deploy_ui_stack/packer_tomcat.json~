@@ -1,0 +1,72 @@
+{
+  "variables": {
+    "account_id": "",
+    "aws_access_key_id": "",
+    "aws_secret_key": "",
+    "aws_region": "ap-southeast-2",
+    "s3_bucket": "",
+    "x509_cert_path": "",
+    "x509_key_path": ""
+  },
+
+  "builders": [
+    { "type": "amazon-instance",
+      "access_key": "{{user `aws_access_key_id`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "ap-southeast-2",
+      "source_ami": "ami-d3daace9",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "tomcat_rhel_inst_packer_{{timestamp}}",
+
+      "bundle_vol_command": "sudo -n env EC2_AMITOOL_HOME=/usr/local/ec2/ec2-ami-tools /usr/local/ec2/ec2-ami-tools/bin/ec2-bundle-vol -k {{.KeyPath}}  -u {{.AccountId}} -c {{.CertPath}} -r {{.Architecture}} -e {{.PrivatePath}}/* -d {{.Destination}} -p {{.Prefix}} --batch --no-filter",
+      "bundle_upload_command": "sudo -n env EC2_AMITOOL_HOME=/usr/local/ec2/ec2-ami-tools /usr/local/ec2/ec2-ami-tools/bin/ec2-upload-bundle -b {{.BucketName}} -m {{.ManifestPath}} -a {{.AccessKey}} -s {{.SecretKey}} -d {{.BundleDirectory}} --batch --retry",
+
+      "account_id": "{{user `account_id`}}",
+      "s3_bucket": "{{user `s3_bucket`}}",
+      "x509_cert_path": "{{user `x509_cert_path`}}",
+      "x509_key_path": "{{user `x509_key_path`}}",
+      "tags": {
+		"Name": "Tomcat UI image",
+		"Release": "Dev",
+		"Cost Centre": "Pan Dev Ops"
+       }
+    },
+
+    { "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key_id`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "ap-southeast-2",
+      "source_ami": "ami-d3daace9",
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "tomcat_rhel_ebs_packer_{{timestamp}}",
+      "tags": {
+		"Name": "BT Tomcat UI",
+		"Release": "Dev",
+		"Cost Centre": "Pan Dev Ops"
+      }
+    }
+  ],
+
+  "provisioners" : [ 
+    { "type": "chef-solo",
+      "environments_path": "./environments",
+      "chef_environment": "cloud",
+      "cookbook_paths": [ "./berks-cookbooks" ],
+      "roles_path": "./roles",
+      "data_bags_path": "./data_bags",
+      "run_list": [ "role[tomcat]", "bt_awscli::default" ]
+    },
+    { "type": "file", 
+      "source": "tests", 
+      "destination": "/tmp" 
+    },
+    { "type": "shell", 
+      "script": "tests/scripts/serverspec.sh" 
+    }  
+  ]
+
+}
+
+

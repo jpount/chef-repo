@@ -1,0 +1,5 @@
+source "https://supermarket.chef.io"
+
+metadata
+
+cookbook 'bt_ssh', '~> 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_ssh'

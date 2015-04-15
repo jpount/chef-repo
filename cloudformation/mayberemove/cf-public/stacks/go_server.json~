@@ -1,0 +1,101 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"AWS CloudFormation Template Manufactoring Tools: Create Load Balanced Go Server (ASG)",
+  "Parameters":{  
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName"
+    },
+    "InstanceType" : {
+      "Type" : "String"
+    },
+    "HostedZone" : {
+      "Type" : "String"
+    },
+    "DnsPrefix" : {
+      "Type" : "String"
+    },
+    "AMI":{  
+      "Type":"String"
+    },
+    "SSHLocation":{  
+      "Type":"String"
+    }
+  },
+  "Resources":{  
+    "EC2Instance":{  
+      "Type":"AWS::EC2::Instance",
+      "Properties":{  
+        "ImageId":{  
+          "Ref":"AMI"
+        },
+        "InstanceType":{  
+          "Ref":"InstanceType"
+        },
+        "KeyName":{  
+          "Ref":"KeyName"
+        },
+        "SecurityGroups":[  
+          {  
+            "Ref":"InstanceSecurityGroup"
+          }
+        ]
+      }
+    },
+    "InstanceDNSRecord" : {
+      "Type" : "AWS::Route53::RecordSet",
+      "Properties" : {
+        "HostedZoneName" : { "Fn::Join" : [ "", [{"Ref" : "HostedZone"}, "." ]]},
+        "Name" : { "Fn::Join" : [ "", [{"Ref" : "DnsPrefix"}, ".", {"Ref" : "HostedZone"} ,"."]]},
+        "Type" : "A",
+        "TTL" : "60",
+        "ResourceRecords" : [ { "Fn::GetAtt" : [ "EC2Instance", "PublicIp" ] } ]
+      }
+    },
+    "InstanceSecurityGroup":{  
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{  
+        "GroupDescription":"Enable SSH access",
+        "SecurityGroupIngress" : [ 
+        {
+          "CidrIp" : { "Ref" : "SSHLocation"},
+          "IpProtocol" : "tcp",
+          "FromPort" : "8153",
+          "ToPort" : "8153"
+        },{
+          "CidrIp" : { "Ref" : "SSHLocation"},
+          "IpProtocol" : "tcp",
+          "FromPort" : "8154",
+          "ToPort" : "8154"
+        },{
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        } ]
+      }
+    }
+  },
+  "Outputs" : {
+    "R53DNS" : {
+      "Description" : "Route53 DNS of the Instance",
+      "Value":{  
+        "Ref":"InstanceDNSRecord"  
+      }
+    },
+    "URL":{  
+      "Description":"URL for newly created Instance",
+      "Value":{  
+        "Fn::Join":[  
+          "",
+          [  
+            "http://",
+            {  
+              "Ref":"InstanceDNSRecord"
+            },
+            ":8153/go"
+          ]
+        ]
+      }
+    }
+  }
+}

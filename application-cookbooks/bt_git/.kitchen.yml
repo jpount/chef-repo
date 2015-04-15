@@ -1,0 +1,19 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-6.4
+
+suites:
+  - name: default
+    run_list:
+      - recipe[yum::default]
+      - recipe[bt_ssh::default]
+      - recipe[bt_git::default]
+      - recipe[bt_ssh::configure_git]
+    attributes:
+

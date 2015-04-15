@@ -1,0 +1,19 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-6.5
+    driver:
+      network:
+      - ["forwarded_port", {guest: 80, host: 8080}]
+      - ["forwarded_port", {guest: 443, host: 8443}]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[bt_gitlab_omni::default]
+    attributes:

@@ -1,0 +1,20 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+  data_bags_path: "test/data_bags"
+
+platforms:
+  - name: centos-6.5
+    driver:
+      network:
+      - ["forwarded_port", {guest: 8079, host: 8079}]
+      - ["forwarded_port", {guest: 1521, host: 1521}]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[bt_oracle_xe::default]
+    attributes:

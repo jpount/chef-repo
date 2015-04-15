@@ -1,0 +1,206 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"Launches the common build tools - Artifactory, Apache and Sonarqube",
+  "Parameters":{  
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName",
+      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription":"must be the name of an existing EC2 KeyPair."
+    },
+    "HostedZone" : {
+      "Type" : "String",
+      "Default" : "bt.manufacturing",
+      "Description" : "The DNS name of an existing Amazon Route 53 hosted zone (do not include trailing .)",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "SonarInstanceType" : {
+      "Description" : "Sonar EC2 instance type",
+      "Default" : "sonar",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "SonarDnsPrefix" : {
+      "Type" : "String",
+      "Description" : "Sonar DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "SonarAMI":{  
+      "Type":"String",
+      "Description":"Sonar AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-29087b13",
+      "AllowedValues":[  
+        "ami-29087b13"
+      ]
+    },
+    "ArtifactoryInstanceType" : {
+      "Description" : "Artifactory EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "ArtifactoryDnsPrefix" : {
+      "Type" : "String",
+      "Default" : "artifactory",
+      "Description" : "Artifactory DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "ArtifactoryAMI":{  
+      "Type":"String",
+      "Description":"Artifactory AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-2b087b11",
+      "AllowedValues":[  
+        "ami-2b087b11"
+      ]
+    },
+    "ApacheInstanceType" : {
+      "Description" : "Apache EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "ApacheDnsPrefix" : {
+      "Type" : "String",
+      "Default" : "apache",
+      "Description" : "Apache DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "ApacheAMI":{  
+      "Type":"String",
+      "Description":"Apache AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-617e0d5b",
+      "AllowedValues":[  
+        "ami-617e0d5b"
+      ]
+    },
+    "SSHLocation":{  
+      "Type":"String",
+      "Description":" The IP address range that can be used to SSH to the EC2 instances",
+      "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default":"0.0.0.0/0",
+      "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "MaxLength":18,
+      "MinLength":9
+    }
+  },
+  "Resources":{  
+    "ArtifactoryStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/artifactory.json",
+        "Parameters":{  
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"ArtifactoryDnsPrefix"
+          },
+          "InstanceType":{  
+            "Ref":"ArtifactoryInstanceType"
+          },
+          "AMI":{  
+            "Ref":"ArtifactoryAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    },
+    "ApacheStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/apache2.json",
+        "Parameters":{  
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"ApacheDnsPrefix"
+          },
+          "InstanceType":{  
+            "Ref":"ApacheInstanceType"
+          },
+          "AMI":{  
+            "Ref":"ApacheAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    },
+    "SonarqubeStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/sonarqube.json",
+        "Parameters":{  
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"SonarDnsPrefix"
+          },
+          "InstanceType":{  
+            "Ref":"SonarInstanceType"
+          },
+          "AMI":{  
+            "Ref":"SonarAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    }
+  },
+  "Outputs": {
+       "SonarStackRef": {
+           "Value": { "Ref": "SonarqubeStack" }
+       },
+       "SonarWebsiteURL": {
+           "Description":"URL for newly created SonarServer application",
+           "Value": { "Fn::GetAtt": [ "SonarqubeStack", "Outputs.URL" ]}
+       },
+       "ApacheStackRef": {
+           "Value": { "Ref": "ApacheStack" }
+       },
+       "ApacheWebsiteURL": {
+           "Description":"URL for newly created Apache application",
+           "Value": { "Fn::GetAtt": [ "ApacheStack", "Outputs.URL" ]}
+       },
+       "ArtifactoryStackRef": {
+           "Value": { "Ref": "ArtifactoryStack" }
+       },
+       "WebsiteURL": {
+           "Description":"URL for newly created Artifactory application",
+           "Value": { "Fn::GetAtt": [ "ArtifactoryStack", "Outputs.URL" ]}
+       }
+  }
+}
+

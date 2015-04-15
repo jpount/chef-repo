@@ -1,0 +1,219 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"Launches the GO build tools - Go Server and Agents",
+  "Parameters":{  
+    "Owner": {
+      "Description" : "Resources Owner",
+      "Type": "String",
+      "Default" : "bt",
+      "AllowedValues" : [ "bt" ]
+    },
+      "Project": {
+      "Description" : "Project Name",
+      "Default" : "panorama",
+      "Type": "String",
+      "AllowedValues" : [ "panorama" ]
+    },
+    "Environment": {
+      "Description" : "Working Environment - prod, test, devel",
+      "Type": "String",
+      "Default" : "devel",
+      "AllowedValues" : [ "test", "devel" ]
+    },  
+    "VPCId":{  
+      "Type":"AWS::EC2::VPC::Id",
+      "Default" : "vpc-699a540c",
+      "Description":"Name of an existing VPC to house the instances",
+      "ConstraintDescription":"must be the name of an existing VPC"
+    },
+    "SubnetId":{  
+      "Type":"AWS::EC2::Subnet::Id",
+      "Default" : "subnet-81b713e4",
+      "Description":"Name of an existing Subnet to house the instances",
+      "ConstraintDescription":"must be the name of an existing Subnet"
+    },
+    "AZs" : {
+	"Type" : "String",
+	"Default" : "ap-southeast-2a,ap-southeast-2b",
+	"Description" : "The Comma Delimited list of AvailabilityZones for your VPC. It needs to be consistent with the AZ of your subnets."
+    },
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName",
+      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription":"must be the name of an existing EC2 KeyPair."
+    },
+    "HostedZone" : {
+      "Type" : "String",
+      "Default" : "manufacturing.local",
+      "Description" : "The DNS name of an existing Amazon Route 53 hosted zone (do not include trailing .)",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "GoServerInstanceType" : {
+      "Description" : "Go Server EC2 instance type",
+      "Type" : "String",
+      "Default" : "m3.large",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "GoServerDnsPrefix" : {
+      "Type" : "String",
+      "Default" : "go.server",
+      "Description" : "Go Server DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "GoServerAMI":{  
+      "Type":"String",
+      "Description":"Go Server AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-2516641f",
+      "AllowedValues":[  
+        "ami-2516641f"
+      ]
+    },
+    "GoAgentInstanceType" : {
+      "Description" : "Go Agent EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "GoAgentAMI":{  
+      "Type":"String",
+      "Description":"Go Agent AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-1116642b",
+      "AllowedValues":[  
+        "ami-1116642b"
+      ]
+    },
+    "MaxInstances":{  
+      "Type":"String",
+      "Description":"The maximum number of agent instances in the group",
+      "ConstraintDescription":"must be a valid number",
+      "Default":"2",
+      "AllowedPattern":"[0-9]",
+      "MaxLength":2,
+      "MinLength":1
+    },
+    "SSHLocation":{  
+      "Type":"String",
+      "Description":" The IP address range that can be used to SSH to the EC2 instances",
+      "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default":"0.0.0.0/0",
+      "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "MaxLength":18,
+      "MinLength":9
+    }
+  },
+  "Resources":{  
+    "GoServerStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/go_server.json",
+        "Parameters":{
+	  "Owner": {
+            "Ref":"Owner"
+	  },
+  	  "Project": {
+            "Ref":"Project"
+	  },
+ 	  "Environment": {
+            "Ref":"Environment"
+	  },
+          "VPCId":{  
+            "Ref":"VPCId"
+          },
+          "SubnetId":{  
+            "Ref":"SubnetId"
+          },
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"GoServerDnsPrefix"
+          },
+          "InstanceType":{  
+            "Ref":"GoServerInstanceType"
+          },
+          "AMI":{  
+            "Ref":"GoServerAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    },
+    "GoAgentStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/go_agent.json",
+        "Parameters":{
+	  "Owner": {
+            "Ref":"Owner"
+	  },
+  	  "Project": {
+            "Ref":"Project"
+	  },
+ 	  "Environment": {
+            "Ref":"Environment"
+	  },
+          "VPCId":{  
+            "Ref":"VPCId"
+          },
+          "SubnetId":{  
+            "Ref":"SubnetId"
+          },
+          "AZs":{  
+            "Ref":"AZs"
+          },
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "InstanceType":{  
+            "Ref":"GoAgentInstanceType"
+          },
+          "MaxInstances":{  
+            "Ref":"MaxInstances"
+          },
+          "AMI":{  
+            "Ref":"GoAgentAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    }
+  },
+  "Outputs": {
+       "GoServerStackRef": {
+           "Value": { "Ref": "GoServerStack" }
+       },
+       "GoServerDnsname": {
+           "Description":"The Route53 DNS of the newly created EC2 instance",
+           "Value": { "Fn::GetAtt": [ "GoServerStack", "Outputs.R53DNS" ]}
+       },
+       "GoServerURL": {
+           "Description":"The website url",
+           "Value": { "Fn::GetAtt": [ "GoServerStack", "Outputs.URL" ]}
+       },
+       "GoAgentStackRef": {
+           "Value": { "Ref": "GoAgentStack" }
+       },
+       "GoAgentMessage": {
+           "Description":"Stack Message",
+           "Value": { "Fn::GetAtt": [ "GoAgentStack", "Outputs.Message" ]}
+       }
+  }
+}
+

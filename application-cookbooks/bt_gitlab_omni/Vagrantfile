@@ -1,0 +1,54 @@
+class HackyGuestAdditionsInstaller < VagrantVbguest::Installers::Ubuntu
+  def install(opts=nil, &block)
+    super
+    super_garbage_hack = <<-EOF
+if [ ! -e /usr/lib/VBoxGuestAdditions ]; then
+  sudo ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions \
+    /usr/lib/VBoxGuestAdditions || true
+fi
+EOF
+    communicate.sudo(super_garbage_hack)
+  end
+end
+
+Vagrant::configure("2") do |config|
+
+  # enable cachier
+  #config.cache.scope = :box
+
+  # the Chef version to use
+  config.omnibus.chef_version = "12.0.3"
+
+  # enable berkshelf plugin
+  config.berkshelf.enabled = true
+
+  # configure the basebox
+#  config.vm.box = "opscode-centos-6.5"
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vbguest.installer = HackyGuestAdditionsInstaller
+
+  #
+  # define the VM
+  #
+  config.vm.define :'bt_gitlab_omni' do | config |
+
+    # configure host-only network
+    config.vm.hostname = "btgitlabomni.local"
+    config.vm.network :private_network, ip: "172.16.40.25"
+
+    config.vm.network "forwarded_port", guest: 80, host: 80
+    config.vm.network "forwarded_port", guest: 636, host: 636
+
+    # virtualbox-specific customizations
+    config.vm.provider :virtualbox do |vbox, override|
+      vbox.customize ["modifyvm", :id, "--name", "btgitlabomni.local"]
+    end
+
+    # provisioning
+    config.vm.provision :chef_solo do |chef|
+      chef.add_recipe "bt_gitlab_omni::default"
+      chef.log_level = :info
+    end
+  end
+end

@@ -1,0 +1,241 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"Launches Go Agents",
+  "Parameters":{  
+    "VPCId":{  
+      "Type":"AWS::EC2::VPC::Id",
+      "Default" : "vpc-699a540c",
+      "Description":"Name of an existing VPC to house the instances",
+      "ConstraintDescription":"must be the name of an existing VPC"
+    },
+    "SubnetId":{  
+      "Type":"List<AWS::EC2::Subnet::Id>",
+      "Default" : "subnet-80b713e5",
+      "Description":"Name of an existing Subnet to house the instances",
+      "ConstraintDescription":"must be the name of an existing Subnet"
+    },
+    "AZs" : {
+	"Type" : "CommaDelimitedList",
+	"Default" : "ap-southeast-2a,ap-southeast-2b",
+	"Description" : "The list of AvailabilityZones for your Virtual Private Cloud (VPC). It needs to be consistent with the AZ of your subnets."
+    },
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName",
+      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription":"must be the name of an existing EC2 KeyPair."
+    },
+    "InstanceType" : {
+      "Description" : "Go Agent EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "AMI":{  
+      "Type":"String",
+      "Description":"Go Agent AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-cbcbbbf1",
+      "AllowedValues":[  
+        "ami-cbcbbbf1"
+      ]
+    },
+    "MaxInstances":{  
+      "Type":"String",
+      "Description":"The maximum number of agent instances in the group",
+      "ConstraintDescription":"must be a valid number",
+      "Default":"2",
+      "AllowedPattern":"[0-9]",
+      "MaxLength":2,
+      "MinLength":1
+    },
+    "SSHLocation":{  
+      "Type":"String",
+      "Description":" The IP address range that can be used to SSH to the EC2 instances",
+      "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default":"0.0.0.0/0",
+      "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "MaxLength":18,
+      "MinLength":9
+    }
+  },
+  "Resources":{  
+    "GoAgentGroup":{ 
+      "Type":"AWS::AutoScaling::AutoScalingGroup",
+      "Properties":{ 
+        "AvailabilityZones":{ "Ref" : "AZs" },
+        "VPCZoneIdentifier" : { "Ref" : "SubnetId" },
+        "LaunchConfigurationName":{ "Ref":"LaunchConfig" },
+        "MinSize":"1",
+        "MaxSize":{ "Ref":"MaxInstances" },
+        "DesiredCapacity":"1"
+     },
+      "UpdatePolicy":{ 
+        "AutoScalingRollingUpdate":{ 
+          "MinInstancesInService":"1",
+          "MaxBatchSize":"1",
+          "PauseTime":"PT10M",
+          "WaitOnResourceSignals":"true"
+        }
+      }
+    },
+    "LaunchConfig" : {
+      "Type" : "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata" : {
+        "Comment" : "Launch Go Agents ASG",
+        "AWS::CloudFormation::Init" : {
+          "config" : {
+            "packages" : {
+            },
+            "files" : {
+              "/etc/cfn/cfn-hup.conf" : {
+                "content" : { "Fn::Join" : ["", [
+                  "[main]\n",
+                  "stack=", { "Ref" : "AWS::StackId" }, "\n",
+                  "region=", { "Ref" : "AWS::Region" }, "\n"
+                ]]},
+                "mode"    : "000400",
+                "owner"   : "root",
+                "group"   : "root"
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf" : {
+                "content": { "Fn::Join" : ["", [
+                  "[cfn-auto-reloader-hook]\n",
+                  "triggers=post.update\n",
+                  "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                  "action=/opt/aws/bin/cfn-init -v ",
+                  "         --stack ", { "Ref" : "AWS::StackName" },
+                  "         --resource LaunchConfig ",
+                  "         --region ", { "Ref" : "AWS::Region" }, "\n",
+                  "runas=root\n"
+                ]]}
+              }
+            },
+            "services" : {
+              "sysvinit" : {
+                "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
+                              "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
+              }
+            }
+          }
+        }
+      },
+      "Properties" : {
+        "KeyName" : { "Ref" : "KeyName" },
+        "ImageId" : { "Ref" : "AMI" },
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash -xe\n",
+          "yum update -y aws-cfn-bootstrap\n",
+          "/opt/aws/bin/cfn-init -v ",
+          "         --stack ", { "Ref" : "AWS::StackId" },
+          "         --resource LaunchConfig ",
+          "         --region ", { "Ref" : "AWS::Region" }, "\n",
+          "# All is well so signal success\n",
+        ]]}}
+      }
+    },
+
+
+		"ScaleUpPolicy" : {
+			"Type" : "AWS::AutoScaling::ScalingPolicy",
+			"Properties" : {
+				"AdjustmentType" : "ChangeInCapacity",
+				"AutoScalingGroupName" : { "Ref" : "GoAgentGroup" },
+				"Cooldown" : "60",
+				"ScalingAdjustment" : "1"
+			}
+		},
+
+		"ScaleDownPolicy" : {
+			"Type" : "AWS::AutoScaling::ScalingPolicy",
+			"Properties" : {
+				"AdjustmentType" : "ChangeInCapacity",
+				"AutoScalingGroupName" : { "Ref" : "GoAgentGroup" },
+				"Cooldown" : "60",
+				"ScalingAdjustment" : "-1"
+			}
+		},
+
+		"CPUAlarmHigh": {
+			"Type": "AWS::CloudWatch::Alarm",
+			"Properties": {
+				"AlarmDescription": "Scale-up if CPU > 80% for 10 minutes",
+				"MetricName": "CPUUtilization",
+				"Namespace": "AWS/EC2",
+				"Statistic": "Average",
+				"Period": "300",
+				"EvaluationPeriods": "2",
+				"Threshold": "80",
+				"AlarmActions": [ { "Ref": "ScaleUpPolicy" } ],
+				"Dimensions": [
+				               {
+				            	   "Name": "AutoScalingGroupName",
+				            	   "Value": { "Ref": "GoAgentGroup" }
+				               }
+				               ],
+				               "ComparisonOperator": "GreaterThanThreshold"
+			}
+		},
+
+		"CPUAlarmLow": {
+			"Type": "AWS::CloudWatch::Alarm",
+			"Properties": {
+				"AlarmDescription": "Scale-down if CPU < 20% for 10 minutes",
+				"MetricName": "CPUUtilization",
+				"Namespace": "AWS/EC2",
+				"Statistic": "Average",
+				"Period": "300",
+				"EvaluationPeriods": "2",
+				"Threshold": "20",
+				"AlarmActions": [ { "Ref": "ScaleDownPolicy" } ],
+				"Dimensions": [
+				               {
+				            	   "Name": "AutoScalingGroupName",
+				            	   "Value": { "Ref": "GoAgentGroup" }
+				               }
+				               ],
+				               "ComparisonOperator": "LessThanThreshold"
+			}
+		},
+
+
+
+
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "VpcId": {
+          "Ref": "VPCId"
+        },
+        "GroupDescription" : "Enable SSH access and HTTP access on the inbound ports",
+        "SecurityGroupIngress" : [ 
+        {
+          "IpProtocol" : "tcp",
+          "FromPort" : "8153",
+          "ToPort" : "8153",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },{
+          "IpProtocol" : "tcp",
+          "FromPort" : "8154",
+          "ToPort" : "8154",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        },{
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        } ]
+      }
+    }
+  },
+  "Outputs" : {
+    "Message" : {
+      "Value" :  "Done"
+    }
+  }
+
+}
+

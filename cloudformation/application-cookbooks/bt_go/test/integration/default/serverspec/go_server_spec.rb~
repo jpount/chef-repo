@@ -1,0 +1,14 @@
+require 'spec_helper'
+
+describe 'go-server' do
+  describe 'is installed' do
+    describe file('/var/lib/go-server') do
+      it { should be_directory }
+    end
+  end
+  describe 'is running' do
+    describe service('go-server') do
+      it { should be_running }
+    end
+  end
+end

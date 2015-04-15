@@ -1,0 +1,42 @@
+{
+  "nodes": {
+    "server": {
+      ":node": "go-server",
+      ":ip": "192.168.33.21",
+      ":host": "go.server",
+      "ports": [
+        {
+          ":host": 2201,
+          ":guest": 22,
+          ":id": "ssh"
+        },
+        {
+          ":host": 8153,
+          ":guest": 8153,
+          ":id": "xe-server"
+        }
+      ],
+      ":memory": 1024,
+      ":chef-recipe": "server_linux"
+    },
+    "agent": {
+      ":node": "go-agent",
+      ":ip": "192.168.33.31",
+      ":host": "go.agent",
+      "ports": [
+        {
+          ":host": 2202,
+          ":guest": 22,
+          ":id": "ssh"
+        },
+        {
+          ":host": 8154,
+          ":guest": 8154,
+          ":id": "xe-agent"
+        }
+      ],
+      ":memory": 1024,
+      ":chef-recipe": "agent_linux"
+    }
+  }
+}

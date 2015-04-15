@@ -1,0 +1,253 @@
+{  
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"Launches the simple E2E Stack - Tomcat, Mock ICC (Tomcat) and Avaloq Guest",
+  "Parameters":{
+    "Owner": {
+      "Description" : "Resources Owner",
+      "Type": "String",
+      "Default" : "bt",
+      "AllowedValues" : [ "bt" ]
+    },
+      "Project": {
+      "Description" : "Project Name",
+      "Default" : "panorama",
+      "Type": "String",
+      "AllowedValues" : [ "panorama" ]
+    },
+    "Environment": {
+      "Description" : "Working Environment - prod, test, devel",
+      "Type": "String",
+      "Default" : "devel",
+      "AllowedValues" : [ "test", "devel" ]
+    },  
+    "KeyName":{  
+      "Type":"AWS::EC2::KeyPair::KeyName",
+      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the instances",
+      "ConstraintDescription":"must be the name of an existing EC2 KeyPair."
+    },
+    "TomcatInstanceType" : {
+      "Description" : "Tomcat EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "TomcatAMI":{  
+      "Type":"String",
+      "Description":"Tomcat AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-55b3c16f",
+      "AllowedValues":[  
+        "ami-55b3c16f"
+      ]
+    },
+    "TomcatApplicationURL":{  
+      "Type":"String",
+      "Description" : "Barista file location (S3, artifactory or some other accessible URL",
+      "Default" : "https://s3-ap-southeast-2.amazonaws.com/appartifacts/2.1-b207/nextgen-ui-2.1-b207-barista.zip"
+    },
+    "TomcatApplicationPropertiesURL":{  
+      "Type":"String",
+      "Description" : "Properties file location (S3, artifactory or some other accessible URL",
+      "Default" : "https://s3-ap-southeast-2.amazonaws.com/appartifacts/2.1-b207/nextgen-batteries.zip"
+    },
+    "HostedZone" : {
+      "Type" : "String",
+      "Description" : "The DNS name of an existing Amazon Route 53 hosted zone (do not include trailing .)",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "Default" : "environments.local",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "TomcatDnsPrefix" : {
+      "Type" : "String",
+      "Description" : "Tomcat DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "Default" : "tomcat",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "ICCDnsPrefix" : {
+      "Type" : "String",
+      "Description" : "ICC DNS - The DNS prefix for this instance. Full name will be [DnsPrefix].[HostedZone]",
+      "AllowedPattern" : "(?!-)[a-zA-Z0-9-.]{1,63}(?<!-)",
+      "Default" : "tomcat",
+      "ConstraintDescription" : "must be a valid DNS zone name."
+    },
+    "ICCInstanceType" : {
+      "Description" : "ICC EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "AllowedValues" : [ "t2.micro", "t2.small", "t2.medium", "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c4.large", "c4.xlarge", "c4.2xlarge", "c4.4xlarge", "c4.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge", "r3.4xlarge", "r3.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge", "i2.8xlarge", "hs1.8xlarge"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "ICCAMI":{  
+      "Type":"String",
+      "Description":"ICC AMI type",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-55b3c16f",
+      "AllowedValues":[  
+        "ami-55b3c16f"
+      ]
+    },
+    "ICCApplicationURL":{  
+      "Type":"String",
+      "Description" : "War file location (artifactory or some other accessible URL",
+      "Default" : ""
+    },
+    "ICCApplicationPropertiesURL":{  
+      "Type":"String",
+      "Description" : "Properties file location (S3, artifactory or some other accessible URL",
+      "Default" : "https://s3-ap-southeast-2.amazonaws.com/appartifacts/2.1-b207/nextgen-batteries.zip"
+    },
+    "SSHLocation":{  
+      "Type":"String",
+      "Description":" The IP address range that can be used to SSH to the EC2 instances",
+      "ConstraintDescription":"must be a valid IP CIDR range of the form x.x.x.x/x.",
+      "Default":"0.0.0.0/0",
+      "AllowedPattern":"(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "MaxLength":18,
+      "MinLength":9
+    }
+  },
+  "Resources":{  
+    "TomcatStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/tomcat.json",
+        "Parameters":{
+	  "Owner": {
+            "Ref":"Owner"
+	  },
+  	  "Project": {
+            "Ref":"Project"
+	  },
+ 	  "Environment": {
+            "Ref":"Environment"
+	  },
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+          "InstanceType":{  
+            "Ref":"TomcatInstanceType"
+          },
+          "AMI":{  
+            "Ref":"TomcatAMI"
+          },
+    "VPCId": {
+            "Ref":"VPCId"
+    },
+    "SubnetId": {
+            "Ref":"SubnetId"
+    },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"TomcatDnsPrefix"
+          },
+          "ApplicationURL":{  
+            "Ref":"TomcatApplicationURL"
+          },
+          "ApplicationPropertiesURL":{  
+            "Ref":"TomcatApplicationPropertiesURL"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    },
+    "ICCStack":{  
+      "Type":"AWS::CloudFormation::Stack",
+      "Properties":{  
+        "TemplateURL":"https://s3-ap-southeast-2.amazonaws.com/bt-cf-stacks/tomcat.json",
+        "Parameters":{
+	  "Owner": {
+            "Ref":"Owner"
+	  },
+  	  "Project": {
+            "Ref":"Project"
+	  },
+ 	  "Environment": {
+            "Ref":"Environment"
+	  },
+          "KeyName":{  
+            "Ref":"KeyName"
+          },
+    "VPCId": {
+            "Ref":"VPCId"
+    },
+    "SubnetId": {
+            "Ref":"SubnetId"
+    },
+          "HostedZone":{  
+            "Ref":"HostedZone"
+          },
+          "DnsPrefix":{  
+            "Ref":"ICCDnsPrefix"
+          },
+          "ApplicationURL":{  
+            "Ref":"ICCApplicationURL"
+          },
+          "ApplicationPropertiesURL":{  
+            "Ref":"ICCApplicationPropertiesURL"
+          },
+          "InstanceType":{  
+            "Ref":"ICCInstanceType"
+          },
+          "AMI":{  
+            "Ref":"ICCAMI"
+          },
+          "SSHLocation":{  
+            "Ref":"SSHLocation"
+          }
+        },
+        "TimeoutInMinutes":"60"
+      }
+    }
+  },
+  "Outputs": {
+       "TomcatStackRef": {
+           "Value": { "Ref": "TomcatStack" }
+       },
+       "TomcatPrivateDnsname": {
+           "Description":"The Private DNS of the newly created Tomcat EC2 instance",
+           "Value": { "Fn::GetAtt": [ "TomcatStack", "Outputs.PrivateDNS" ]}
+       },
+       "TomcatPrivateIP": {
+           "Description":"The Private IP of the newly created Tomcat EC2 instance",
+           "Value": { "Fn::GetAtt": [ "TomcatStack", "Outputs.PrivateIP" ]}
+       },
+       "TomcatRoute53": {
+           "Description":"The DNS of the newly created Tomcat EC2 instance",
+           "Value": { "Fn::GetAtt": [ "TomcatStack", "Outputs.R53DNS" ]}
+       },
+       "TomcatURL": {
+           "Description":"The URL of the newly created Tomcat EC2 instance",
+           "Value": { "Fn::GetAtt": [ "TomcatStack", "Outputs.URL" ]}
+       },
+       "ICCStackRef": {
+           "Value": { "Ref": "ICCStack" }
+       },
+       "ICCPrivateDnsname": {
+           "Description":"The Private DNS of the newly created ICC EC2 instance",
+           "Value": { "Fn::GetAtt": [ "ICCStack", "Outputs.PrivateDNS" ]}
+       },
+       "ICCPrivateIP": {
+           "Description":"The Private IP of the newly created ICC EC2 instance",
+           "Value": { "Fn::GetAtt": [ "ICCStack", "Outputs.PrivateIP" ]}
+       },
+       "ICCRoute53": {
+           "Description":"The DNS of the newly created ICC EC2 instance",
+           "Value": { "Fn::GetAtt": [ "ICCStack", "Outputs.R53DNS" ]}
+       },
+       "ICCURL": {
+           "Description":"The URL of the newly created ICC EC2 instance",
+           "Value": { "Fn::GetAtt": [ "ICCStack", "Outputs.URL" ]}
+       }
+  }
+}
+
+

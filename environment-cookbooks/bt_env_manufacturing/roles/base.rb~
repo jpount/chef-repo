@@ -1,0 +1,4 @@
+name "remote_git"
+description "A role to configure git"
+run_list "recipe[bt_env_git::default]"
+

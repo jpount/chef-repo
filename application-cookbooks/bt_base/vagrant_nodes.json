@@ -1,0 +1,18 @@
+{
+  "nodes": {
+    "server": {
+      ":node": "base",
+      ":ip": "192.168.33.31",
+      ":host": "base",
+      "ports": [
+        {
+          ":host": 2201,
+          ":guest": 22,
+          ":id": "ssh"
+        }
+      ],
+      ":memory": 1024,
+      ":chef-recipe": "bt_base"
+    }
+  }
+}

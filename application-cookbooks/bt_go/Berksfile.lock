@@ -1,0 +1,21 @@
+DEPENDENCIES
+  bt_go
+    path: .
+    metadata: true
+  bt_java
+    path: ../bt_java
+
+GRAPH
+  apt (2.6.1)
+  bt_go (0.1.0)
+    apt (>= 1.9.2)
+    bt_java (>= 0.1.0)
+    windows (>= 1.2.6)
+    yum (>= 3.0.0)
+  bt_java (0.1.0)
+    java (>= 1.31.0)
+  chef_handler (1.1.6)
+  java (1.31.0)
+  windows (1.36.6)
+    chef_handler (>= 0.0.0)
+  yum (3.5.3)

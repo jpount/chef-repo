@@ -1,0 +1,18 @@
+DEPENDENCIES
+  bt_gitlab_omni
+    path: .
+    metadata: true
+  bt_ssh
+    path: ../bt_ssh
+
+GRAPH
+  bt_gitlab_omni (0.1.0)
+    gitlab_omnibus (~> 0.3.0)
+    openssh (~> 1.3.4)
+    postfix (~> 3.6.2)
+  bt_ssh (0.1.0)
+  gitlab_omnibus (0.3.0)
+  iptables (1.0.0)
+  openssh (1.3.4)
+    iptables (>= 0.0.0)
+  postfix (3.6.2)

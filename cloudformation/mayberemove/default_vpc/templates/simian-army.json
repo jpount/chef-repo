@@ -1,0 +1,162 @@
+
+{
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Description":"NetflixOSS Simian Army - Template by Answers for AWS, changed by JP",
+  "Parameters":{
+    "InstanceType":{
+      "Description":"Type of EC2 instances to launch",
+      "Type":"String",
+      "Default":"t1.micro",
+      "AllowedValues" : [ "t1.micro", "m1.small", "m1.medium", "m1.large", "m1.xlarge", "m2.xlarge", "m2.2xlarge", "m2.4xlarge", "m3.xlarge", "m3.2xlarge", "c1.medium", "c1.xlarge", "cg1.4xlarge" ],
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "AMI":{  
+      "Type":"String",
+      "Description":"AMI type - Default is the changed version or use the original",
+      "ConstraintDescription":"must be a valid AMI.",
+      "Default":"ami-29910c13",
+      "AllowedValues":[  
+        "ami-29910c13", "ami-29910c13"
+      ]
+    },
+    "KeyName":{
+      "Description":"The EC2 Key Pair to allow SSH access to the instances",
+      "Type":"AWS::EC2::KeyPair::KeyName"
+    }
+  },
+
+  "Resources" : {
+    "SimianArmyIamRole":{
+      "Type":"AWS::IAM::Role",
+      "Properties":{
+        "AssumeRolePolicyDocument":{
+          "Statement":[
+            {
+              "Effect":"Allow",
+              "Principal":{
+                "Service":[
+                  "ec2.amazonaws.com"
+                ]
+              },
+              "Action":[
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path":"/",
+        "Policies":[
+          {
+            "PolicyName":"SimianArmyPolicy",
+            "PolicyDocument":{
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:CreateTags",
+                    "ec2:DeleteSnapshot",
+                    "ec2:DescribeImages",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeSnapshots",
+                    "ec2:DescribeVolumes",
+                    "ec2:TerminateInstances",
+                    "autoscaling:DeleteAutoScalingGroup",
+                    "autoscaling:DescribeAutoScalingGroups",
+                    "autoscaling:DescribeAutoScalingInstances",
+                    "autoscaling:DescribeLaunchConfigurations",
+                    "sdb:BatchDeleteAttributes",
+                    "sdb:BatchPutAttributes",
+                    "sdb:CreateDomain",
+                    "sdb:DeleteDomain",
+                    "sdb:DomainMetadata",
+                    "sdb:GetAttributes",
+                    "sdb:ListDomains",
+                    "sdb:PutAttributes",
+                    "sdb:Select",
+                    "ses:SendEmail"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "SimianArmyInstanceProfile":{
+      "Type":"AWS::IAM::InstanceProfile",
+      "Properties":{
+        "Path":"/",
+        "Roles":[
+          {
+            "Ref":"SimianArmyIamRole"
+          }
+        ]
+      }
+    },
+    
+    "SimianArmyASG":{
+      "Type":"AWS::AutoScaling::AutoScalingGroup",
+      "Properties":{
+        "AvailabilityZones":{
+          "Fn::GetAZs":""
+        },
+        "LaunchConfigurationName":{
+          "Ref":"SimianArmyLaunchConfig"
+        },
+        "MinSize":1,
+        "MaxSize":1,
+        "Cooldown":"120",
+        "Tags":[
+          {
+            "Key":"Name",
+            "Value":"SimianArmy",
+            "PropagateAtLaunch":"true"
+          }
+        ]
+      }
+    },
+    
+    "SimianArmyLaunchConfig":{
+      "Type":"AWS::AutoScaling::LaunchConfiguration",
+      "Properties":{
+        "KeyName":{
+          "Ref":"KeyName"
+        },
+        "ImageId":{
+            "Ref":"AMI"
+        },
+        "SecurityGroups":[
+          {
+            "Ref":"SimianArmySecurityGroup"
+          }
+        ],
+        "InstanceType":{ "Ref": "InstanceType" },
+        "IamInstanceProfile":{
+          "Ref":"SimianArmyInstanceProfile"
+        }
+      }
+    },
+    
+    "SimianArmySecurityGroup":{
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{
+        "GroupDescription":"Access to Simian Army",
+        "SecurityGroupIngress":[
+          {
+            "IpProtocol":"tcp",
+            "FromPort":"22",
+            "ToPort":"22",
+            "CidrIp":"0.0.0.0/0"
+          },
+          {
+            "IpProtocol":"tcp",
+            "FromPort":"8080",
+            "ToPort":"8080",
+            "CidrIp":"0.0.0.0/0"
+          }
+        ]
+      }
+    }
+  }
+}
