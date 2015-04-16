@@ -1,0 +1,7 @@
+source 'https://supermarket.getchef.com'
+
+metadata
+
+cookbook 'bt_awscli', '= 0.1.0', path: '/home/john/work/BT/chef-repo/application-cookbooks/bt_awscli'
+cookbook 'bt_java', '~> 0.1.0', path: '/home/john/work/BT/chef-repo/application-cookbooks/bt_java'
+cookbook 'bt_tomcat', '~> 0.1.0', path: '/home/john/work/BT/chef-repo/application-cookbooks/bt_tomcat'

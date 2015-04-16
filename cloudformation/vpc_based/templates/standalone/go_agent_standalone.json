@@ -54,9 +54,9 @@
       "Type":"String",
       "Description":"Go Agent AMI type",
       "ConstraintDescription":"must be a valid AMI.",
-      "Default":"ami-79c0b243",
+      "Default":"ami-817f02bb",
       "AllowedValues":[  
-        "ami-79c0b243"
+        "ami-817f02bb"
       ]
     },
     "MaxInstances":{  

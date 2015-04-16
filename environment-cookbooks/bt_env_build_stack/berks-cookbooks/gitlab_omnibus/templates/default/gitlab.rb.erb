@@ -1,0 +1,42 @@
+# This file is managed by Chef, using the gitlab_omnibus cookbook.
+# Editing this file by hand is highly discouraged!
+
+external_url '<%= @external_url %>'
+<% if @ci_external_url -%>
+ci_external_url '<%= @ci_external_url %>'
+<% end -%>
+
+<%
+%w(
+  gitlab_rails
+  user
+  unicorn
+  sidekiq
+  gitlab_shell
+  postgresql
+  redis
+  web_server
+  nginx
+  logging
+  logrotate
+  omnibus_gitconfig
+  gitlab_ci
+  ci_unicorn
+  ci_sidekiq
+  ci_redis
+  ci_nginx
+).each do |variable|
+  instance_variable_get("@#{variable}").sort.each do |k,v|
+    value = if v.is_a?(String)
+              "'#{v}'"
+            elsif v.nil?
+              'nil'
+            else
+              v
+            end
+-%>
+<%= variable %>['<%= k %>'] = <%= value %>
+<%
+  end
+end
+-%>

@@ -1,0 +1,11 @@
+#
+# Cookbook Name:: remote_git
+# Recipe:: default
+#
+# Copyright (c) 2015 The Authors, All Rights Reserved.
+
+include_recipe 'bt_ssh::default'
+include_recipe 'yum'
+include_recipe 'git::default'
+include_recipe 'bt_ssh::configure_git'
+

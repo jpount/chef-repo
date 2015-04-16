@@ -2,5 +2,5 @@ source "https://supermarket.chef.io"
 
 metadata
 
-cookbook 'bt_java', '~> 0.1.0', path: '/home/john/work/BT/chef/application-cookbooks/bt_java'
+cookbook 'bt_java', '~> 0.1.0', path: '/home/john/work/BT/chef-repo/application-cookbooks/bt_java'
 

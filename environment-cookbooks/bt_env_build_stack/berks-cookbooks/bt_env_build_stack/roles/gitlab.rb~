@@ -1,0 +1,5 @@
+name 'gitlab'
+description 'Role for a gitlab instance'
+run_list(
+  "recipe[bt_gitlab_omni::default]", "recipe[bt_ssh::configure_gitlab]"
+)

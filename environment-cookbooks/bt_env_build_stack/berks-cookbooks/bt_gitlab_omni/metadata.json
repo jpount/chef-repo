@@ -1,0 +1,34 @@
+{
+  "name": "bt_gitlab_omni",
+  "description": "Installs/Configures bt_gitlab",
+  "long_description": "Installs/Configures bt_gitlab",
+  "maintainer": "JP",
+  "maintainer_email": "jpount@gmail.com",
+  "license": "all_rights",
+  "platforms": {
+  },
+  "dependencies": {
+    "gitlab_omnibus": "~> 0.3.0",
+    "openssh": "~> 1.3.4",
+    "postfix": "~> 3.6.2"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.1.0",
+  "source_url": "",
+  "issues_url": ""
+}

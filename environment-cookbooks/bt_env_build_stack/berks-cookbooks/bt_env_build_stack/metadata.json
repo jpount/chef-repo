@@ -1,0 +1,35 @@
+{
+  "name": "bt_env_build_stack",
+  "description": "Environment level cookbook for launching the whole build stack",
+  "long_description": "",
+  "maintainer": "YOUR_COMPANY_NAME",
+  "maintainer_email": "YOUR_EMAIL",
+  "license": "none",
+  "platforms": {
+  },
+  "dependencies": {
+    "bt_gitlab_omni": ">= 0.1.0",
+    "bt_go": ">= 0.1.0",
+    "bt_git": ">= 0.1.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "bt_env_build_stack:::default": "Installs and configures Gitlab, a Go server and agent on the same node"
+  },
+  "version": "0.1.0",
+  "source_url": "",
+  "issues_url": ""
+}

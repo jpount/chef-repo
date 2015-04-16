@@ -1,0 +1,32 @@
+{
+  "name": "gitlab_omnibus",
+  "version": "0.2.1",
+  "description": "Installs/Configures GitLab and GitLab CI Omnibus",
+  "long_description": "Installs and configures GitLab and GitLab CI using GitLab Omnibus packages",
+  "maintainer": "Drew Blessing",
+  "maintainer_email": "drew.blessing@mac.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "centos": ">= 6.5",
+    "debian": ">= 7.1",
+    "ubuntu": ">= 12.04"
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  }
+}

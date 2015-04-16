@@ -1,0 +1,41 @@
+DEPENDENCIES
+  bt_awscli
+    path: ../../application-cookbooks/bt_awscli
+  bt_java
+    path: ../../application-cookbooks/bt_java
+  bt_tomcat
+    path: ../../application-cookbooks/bt_tomcat
+  build_base_image
+    path: .
+    metadata: true
+
+GRAPH
+  awscli (1.0.1)
+    python (~> 1.4)
+  bt_awscli (0.1.0)
+    awscli (>= 1.0.1)
+  bt_java (0.1.0)
+    java (>= 1.31.0)
+  bt_tomcat (0.1.0)
+    bt_java (>= 0.1.0)
+    tomcat (>= 0.17.3)
+    yum-epel (>= 0.3.6)
+  build-essential (2.2.3)
+  build_base_image (0.1.0)
+    bt_tomcat (>= 0.1.0)
+    java (>= 1.10.0)
+    yum (>= 3.0.0)
+  chef-sugar (3.1.0)
+  java (1.31.0)
+  openssl (4.0.0)
+    chef-sugar (>= 0.0.0)
+  python (1.4.6)
+    build-essential (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  tomcat (0.17.3)
+    java (>= 0.0.0)
+    openssl (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  yum (3.5.4)
+  yum-epel (0.6.0)
+    yum (~> 3.0)

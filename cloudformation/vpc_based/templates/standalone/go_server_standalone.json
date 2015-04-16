@@ -62,9 +62,9 @@
       "Type":"String",
       "Description":"Go Server AMI type",
       "ConstraintDescription":"must be a valid AMI.",
-      "Default":"ami-2516641f",
+      "Default":"ami-05c6b43f",
       "AllowedValues":[  
-        "ami-2516641f"
+        "ami-05c6b43f"
       ]
     },
     "SSHLocation":{  

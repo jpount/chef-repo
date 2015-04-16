@@ -1,0 +1,6 @@
+name 'git'
+description 'Role for a git instance'
+run_list(
+  "recipe[bt_git::default]", "recipe[bt_ssh::configure_git]"
+)
+

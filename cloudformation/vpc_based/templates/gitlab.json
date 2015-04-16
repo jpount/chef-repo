@@ -63,9 +63,9 @@
       "Type":"String",
       "Description":"GitLab AMI type",
       "ConstraintDescription":"must be a valid AMI.",
-      "Default":"ami-a9166493",
+      "Default":"ami-8b1568b1",
       "AllowedValues":[  
-        "ami-a9166493"
+        "ami-8b1568b1"
       ]
     },
     "SSHLocation":{  
