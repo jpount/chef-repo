@@ -1,0 +1,4 @@
+require 'rake'
+require 'chef/development/rake_tasks'
+
+task :default => 'test'

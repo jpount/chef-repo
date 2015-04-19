@@ -30,5 +30,6 @@ unless platform?('windows')
 end
 
 default['go']['server']['install_path'] = 'C:\Program Files (x86)\Go Server'
-
 default['go']['server'] = '127.0.0.1'
+
+

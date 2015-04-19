@@ -41,7 +41,9 @@
         "#sudo -s"
       ]
     }, 
-    { "type": "shell", 
+    { 
+      "type": "shell", 
+      "execute_command": "sudo -E sh '{{ .Path }}", 
       "script": "scripts/configure_aws_rhel7.sh" 
     }
   ]

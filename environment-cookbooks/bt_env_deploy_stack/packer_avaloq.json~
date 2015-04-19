@@ -38,7 +38,7 @@
     {
       "type": "shell",
       "inline": [
-        "#su -"
+        "#sudo -s"
       ]
     }, 
     { "type": "shell", 

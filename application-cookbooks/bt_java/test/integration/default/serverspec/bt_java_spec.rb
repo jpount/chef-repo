@@ -9,9 +9,7 @@ describe 'java' do
   end
   describe 'is version 7' do
     describe command('java -version') do
-      its(:stdout) { should match /java version \"1.7/ }
+      its(:stdout) { should match(/java version \"1.7/) }
     end
   end
 end
-
-

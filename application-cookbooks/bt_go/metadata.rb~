@@ -20,7 +20,3 @@ depends "apt", ">= 1.9.2"
 depends "bt_java", ">= 0.1.0"
 depends "yum", ">= 3.0.0"
 depends "windows", ">= 1.2.6"
-depends "bt_ruby", ">= 0.1.0"
-
-
-
